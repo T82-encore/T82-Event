@@ -16,9 +16,6 @@ public class Section {
     @Column(name = "sectionId")
     private Long sectionId;
 
-    @Column(name = "placeId")
-    private Long placeId;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "placeId", nullable = false)
     private EventPlace eventPlace;
