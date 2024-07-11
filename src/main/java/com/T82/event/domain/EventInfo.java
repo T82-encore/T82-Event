@@ -28,7 +28,8 @@ public class EventInfo {
     private String description;
 
     @Column(name = "rating")
-    private Double rating;
+    @Builder.Default
+    private Double rating = 0.0;
 
     @Column(name = "runningTime")
     private String runningTime;
@@ -37,10 +38,15 @@ public class EventInfo {
     private String ageRestriction;
 
     @Column(name = "sellCount")
-    private Integer sellCount;
+    @Builder.Default
+    private Integer sellCount = 0;
 
     @Column(name = "bookStartTime")
     private LocalDateTime bookStartTime;
+
+    @Column(name = "isDeleted")
+    @Builder.Default
+    private boolean deleted = false;
 
     @OneToMany(mappedBy = "eventInfo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Event> events;
