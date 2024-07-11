@@ -1,4 +1,4 @@
-package com.example.T82_event;
+package com.T82.event;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
