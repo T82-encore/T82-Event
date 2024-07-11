@@ -2,13 +2,17 @@ package com.T82.event.domain;
 
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
 @Table(name = "Categories")
 @Data
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Category {
 
     @Id
