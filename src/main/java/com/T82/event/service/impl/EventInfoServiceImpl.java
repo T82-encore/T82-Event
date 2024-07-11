@@ -5,6 +5,7 @@ import com.T82.event.domain.repository.EventInfoRepository;
 import com.T82.event.dto.request.EventInfoRequest;
 import com.T82.event.dto.request.UpdateEventInfoRequest;
 import com.T82.event.service.EventInfoService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,15 @@ public class EventInfoServiceImpl implements EventInfoService {
     }
 
     @Override
+    @Transactional
     public void updateEventInfo(Long id, UpdateEventInfoRequest request) {
-
+        EventInfo eventInfo = eventInfoRepository
+                .findById(id)
+                .orElseThrow(IllegalArgumentException::new);
+        eventInfo.setTitle(request.title());
+        eventInfo.setDescription(request.description());
+        eventInfo.setAgeRestriction(request.ageRestriction());
+        eventInfo.setRunningTime(request.runningTime());
+        eventInfo.setBookStartTime(request.bookStartTime());
     }
 }
