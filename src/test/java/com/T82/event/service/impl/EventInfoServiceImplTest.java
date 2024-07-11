@@ -104,4 +104,33 @@ class EventInfoServiceImplTest {
             assertThrows(IllegalArgumentException.class, () -> eventInfoService.updateEventInfo(failedId, request));
         }
     }
+    @Nested
+    @Transactional
+    class 공연정보_삭제 {
+        private Long id;
+        @BeforeEach
+        void setUp() {
+            EventInfoRequest request = new EventInfoRequest(
+                    "뮤지컬 <시카고>",
+                    "테스트 내용 내용 내용",
+                    "174분",
+                    "18세",
+                    LocalDateTime.of(2024, 5, 27, 16, 0),
+                    1L,
+                    5L
+            );
+            id = eventInfoRepository.save(request.toEntity()).getEventInfoId();
+            entityManager.flush();
+            entityManager.clear();
+        }
+        @Test
+        void 성공() {
+            //given
+            Long eventInfoId = id;
+            //when
+            eventInfoService.deleteEventInfo(eventInfoId);
+            //then
+            assertTrue(eventInfoRepository.findById(eventInfoId).get().isDeleted());
+        }
+    }
 }
