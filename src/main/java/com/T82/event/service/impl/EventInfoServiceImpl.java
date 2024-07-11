@@ -33,7 +33,11 @@ public class EventInfoServiceImpl implements EventInfoService {
     }
 
     @Override
+    @Transactional
     public void deleteEventInfo(Long id) {
-
+        EventInfo eventInfo = eventInfoRepository
+                .findById(id)
+                .orElseThrow(IllegalArgumentException::new);
+        eventInfo.setDeleted(true);
     }
 }
