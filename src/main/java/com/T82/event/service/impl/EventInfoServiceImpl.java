@@ -31,4 +31,9 @@ public class EventInfoServiceImpl implements EventInfoService {
         eventInfo.setRunningTime(request.runningTime());
         eventInfo.setBookStartTime(request.bookStartTime());
     }
+
+    @Override
+    public void deleteEventInfo(Long id) {
+
+    }
 }
