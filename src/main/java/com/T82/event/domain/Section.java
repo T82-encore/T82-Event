@@ -23,7 +23,7 @@ public class Section {
     private Long seatColumnsCount;
 
     @Column(name = "sectionName")
-    private Long sectionName;
+    private String sectionName;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "placeId", nullable = false)

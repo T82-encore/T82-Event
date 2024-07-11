@@ -23,7 +23,7 @@ public class EventPlace {
     private String address;
 
     @Column(name = "totalSeat")
-    private Integer totalSeat;
+    private int totalSeat;
 
     @Column(name = "seatAvailable")
     private Boolean seatAvailable;
