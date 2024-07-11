@@ -25,6 +25,9 @@ public class EventPlace {
     @Column(name = "totalSeat")
     private Integer totalSeat;
 
+    @Column(name = "seatAvailable")
+    private Boolean seatAvailable;
+
     @OneToMany(mappedBy = "eventPlace", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EventInfo> eventInfos;
 

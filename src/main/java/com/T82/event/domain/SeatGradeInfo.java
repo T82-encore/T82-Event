@@ -19,15 +19,6 @@ public class SeatGradeInfo {
     @Column(name = "seatGrade")
     private String seatGrade;
 
-    @Column(name = "seatCode")
-    private String seatCode;
-
-    @Column(name = "eventId")
-    private Long eventId;
-
-    @Column(name = "placeId")
-    private Long placeId;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sectionId", nullable = false)
     private Section section;

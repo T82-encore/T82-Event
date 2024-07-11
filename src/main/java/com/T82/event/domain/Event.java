@@ -14,11 +14,11 @@ public class Event {
     @Column(name = "eventId")
     private Long eventId;
 
-    @Column (name = "startTime")
-    private LocalDateTime startTime;
+    @Column (name = "eventStartTime")
+    private LocalDateTime eventStartTime;
 
-    @Column (name = "endTime")
-    private LocalDateTime endTime;
+    @Column (name = "bookEndTime")
+    private LocalDateTime bookEndTime;
 
     @Column (name = "isSoldOut")
     private Boolean isSoldOut;
