@@ -17,5 +17,7 @@ public class EventInfoController {
         eventInfoService.createEventInfo(request);
     }
     @PostMapping("{eventInfoId}")
-    public void updateEventInfo(@PathVariable Long eventInfoId, @RequestBody UpdateEventInfoRequest request) {}
+    public void updateEventInfo(@PathVariable Long eventInfoId, @RequestBody UpdateEventInfoRequest request) {
+        eventInfoService.updateEventInfo(eventInfoId, request);
+    }
 }
