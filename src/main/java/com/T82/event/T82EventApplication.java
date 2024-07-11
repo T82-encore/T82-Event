@@ -1,4 +1,4 @@
-package com.example.T82_event;
+package com.T82.event;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
