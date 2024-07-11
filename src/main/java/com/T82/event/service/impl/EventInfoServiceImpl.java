@@ -3,6 +3,7 @@ package com.T82.event.service.impl;
 import com.T82.event.domain.EventInfo;
 import com.T82.event.domain.repository.EventInfoRepository;
 import com.T82.event.dto.request.EventInfoRequest;
+import com.T82.event.dto.request.UpdateEventInfoRequest;
 import com.T82.event.service.EventInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,5 +16,10 @@ public class EventInfoServiceImpl implements EventInfoService {
     @Override
     public void createEventInfo(EventInfoRequest request) {
         eventInfoRepository.save(request.toEntity());
+    }
+
+    @Override
+    public void updateEventInfo(Long id, UpdateEventInfoRequest request) {
+
     }
 }
