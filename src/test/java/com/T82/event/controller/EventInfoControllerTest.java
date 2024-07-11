@@ -129,5 +129,12 @@ class EventInfoControllerTest {
             //then
             assertTrue(eventInfoRepository.findById(eventInfoId).get().isDeleted());
         }
+        @Test
+        void 실패_데이터_없음() {
+            //given
+            Long failedId = id + 1;
+            //when & then
+            assertThrows(IllegalArgumentException.class, () -> eventInfoController.deleteEventInfo(failedId));
+        }
     }
 }
