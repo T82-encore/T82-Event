@@ -89,5 +89,19 @@ class EventInfoServiceImplTest {
             assertEquals(request.runningTime(), eventInfo1.getRunningTime());
             assertEquals(request.bookStartTime(), eventInfo1.getBookStartTime());
         }
+        @Test
+        void 실패_데이터_없음() {
+            //given
+            UpdateEventInfoRequest request = new UpdateEventInfoRequest(
+                    "테스트제목",
+                    "테스트 설명",
+                    "189분",
+                    "15세",
+                    LocalDateTime.of(2024, 5, 27, 12, 0)
+            );
+            Long failedId = id + 1;
+            //when & then
+            assertThrows(IllegalArgumentException.class, () -> eventInfoService.updateEventInfo(failedId, request));
+        }
     }
 }
