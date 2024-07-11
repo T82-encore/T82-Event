@@ -1,7 +1,7 @@
 package com.T82.event.domain;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,6 +10,10 @@ import java.util.Locale;
 @Entity
 @Table(name = "Event_Infos")
 @Data
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class EventInfo {
 
     @Id
@@ -27,7 +31,7 @@ public class EventInfo {
     private Double rating;
 
     @Column(name = "runningTime")
-    private Integer runningTime;
+    private String runningTime;
 
     @Column(name = "ageRestriction")
     private String ageRestriction;

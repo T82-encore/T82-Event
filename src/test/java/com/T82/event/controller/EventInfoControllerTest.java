@@ -1,9 +1,7 @@
-package com.T82.event.service.impl;
+package com.T82.event.controller;
 
-import com.T82.event.domain.EventInfo;
 import com.T82.event.domain.repository.EventInfoRepository;
 import com.T82.event.dto.request.EventInfoRequest;
-import com.T82.event.service.EventInfoService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -15,11 +13,11 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-class EventInfoServiceImplTest {
-    @Autowired
-    private EventInfoService eventInfoService;
+class EventInfoControllerTest {
     @Autowired
     private EventInfoRepository eventInfoRepository;
+    @Autowired
+    private EventInfoController eventInfoController;
 
     @Nested
     @Transactional
@@ -38,7 +36,7 @@ class EventInfoServiceImplTest {
             );
             int lengthBefore = eventInfoRepository.findAll().size();
             //when
-            eventInfoService.createEventInfo(request);
+            eventInfoController.createEventInfo(request);
             //then
             assertEquals(eventInfoRepository.findAll().size(), lengthBefore + 1);
         }

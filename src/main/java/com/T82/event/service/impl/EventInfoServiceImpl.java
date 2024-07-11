@@ -1,5 +1,6 @@
 package com.T82.event.service.impl;
 
+import com.T82.event.domain.EventInfo;
 import com.T82.event.domain.repository.EventInfoRepository;
 import com.T82.event.dto.request.EventInfoRequest;
 import com.T82.event.service.EventInfoService;
@@ -13,6 +14,6 @@ public class EventInfoServiceImpl implements EventInfoService {
 
     @Override
     public void createEventInfo(EventInfoRequest request) {
-
+        eventInfoRepository.save(request.toEntity());
     }
 }
