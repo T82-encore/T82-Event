@@ -1,8 +1,10 @@
 package com.T82.event.service;
 
-import com.T82.event.domain.EventInfo;
 import com.T82.event.dto.request.EventInfoRequest;
+import com.T82.event.dto.request.UpdateEventInfoRequest;
 
 public interface EventInfoService {
-    public void createEventInfo(EventInfoRequest request);
+    void createEventInfo(EventInfoRequest request);
+    void updateEventInfo(Long id, UpdateEventInfoRequest request);
+    void deleteEventInfo(Long id);
 }

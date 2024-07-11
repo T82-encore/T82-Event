@@ -9,7 +9,6 @@ import java.util.Locale;
 
 @Entity
 @Table(name = "Event_Infos")
-@Data
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,25 +21,37 @@ public class EventInfo {
     private Long eventInfoId;
 
     @Column(name = "title")
+    @Setter
     private String title;
 
     @Column(name = "description")
+    @Setter
     private String description;
 
     @Column(name = "rating")
-    private Double rating;
+    @Builder.Default
+    private Double rating = 0.0;
 
     @Column(name = "runningTime")
+    @Setter
     private String runningTime;
 
     @Column(name = "ageRestriction")
+    @Setter
     private String ageRestriction;
 
     @Column(name = "sellCount")
-    private Integer sellCount;
+    @Builder.Default
+    private Integer sellCount = 0;
 
     @Column(name = "bookStartTime")
+    @Setter
     private LocalDateTime bookStartTime;
+
+    @Column(name = "isDeleted")
+    @Builder.Default
+    @Setter
+    private boolean deleted = false;
 
     @OneToMany(mappedBy = "eventInfo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Event> events;
