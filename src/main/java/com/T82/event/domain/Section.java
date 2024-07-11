@@ -16,6 +16,15 @@ public class Section {
     @Column(name = "sectionId")
     private Long sectionId;
 
+    @Column(name = "seatRowCount")
+    private Long seatRowCount;
+
+    @Column(name = "seatColumnsCount")
+    private Long seatColumnsCount;
+
+    @Column(name = "sectionName")
+    private Long sectionName;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "placeId", nullable = false)
     private EventPlace eventPlace;
