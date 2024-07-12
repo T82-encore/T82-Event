@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: T82-event
+  datasource:
+    url: jdbc:mysql://localhost:3306/T82_Event_Test
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
