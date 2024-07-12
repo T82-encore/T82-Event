@@ -1,6 +1,7 @@
 package com.T82.event.controller;
 
 import com.T82.event.dto.EventCreateDto;
+import com.T82.event.dto.EventUpdateDto;
 import com.T82.event.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -13,10 +14,16 @@ public class EventController {
     private final EventService eventService;
 
     @PostMapping("{eventInfoId}/events")
-    public void CreateEvent(@PathVariable("eventInfoId") Long id
+    public void createEvent(@PathVariable("eventInfoId") Long id
             ,@RequestBody EventCreateDto eventCreateDto){
         eventService.createEvent(id,eventCreateDto);
     }
 
+    @PutMapping("{eventInfoId}/events/{eventId}")
+    public void updateEvent(@PathVariable("eventInfoId") Long id
+            ,@PathVariable("eventId") Long eventId
+            ,@RequestBody EventUpdateDto eventUpdateDto){
+        eventService.updateEvent(id,eventId,eventUpdateDto);
+    }
 
 }

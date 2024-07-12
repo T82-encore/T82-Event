@@ -20,13 +20,19 @@ public class Event {
     private Long eventId;
 
     @Column (name = "eventStartTime")
+    @Setter
     private LocalDateTime eventStartTime;
 
     @Column (name = "bookEndTime")
+    @Setter
     private LocalDateTime bookEndTime;
 
     @Column(name = "isSoldOut")
     private Boolean isSoldOut;
+
+    @Column(name = "isDeleted")
+    @Setter
+    private Boolean isDeleted;
 
     @Column(name = "eventSellCount")
     private Long eventSellCount;
@@ -40,6 +46,9 @@ public class Event {
     protected void onCreate() {
         if (isSoldOut == null) {
             isSoldOut = false;
+        }
+        if (isDeleted == null) {
+            isDeleted = false;
         }
         if (eventSellCount == null) {
             eventSellCount = 0L;
