@@ -9,5 +9,5 @@ public interface EventService {
 
     void updateEvent(Long id, Long eventId, EventUpdateDto eventUpdateDto);
 
-
+    void deleteEvent(Long id, Long eventId);
 }

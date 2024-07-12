@@ -37,5 +37,14 @@ public class EventServiceImpl implements EventService {
         event.setBookEndTime(eventUpdateDto.getBookEndTime());
     }
 
+    @Override
+    @Transactional
+    public void deleteEvent(Long id, Long eventId) {
+        if(!eventInfoRepository.existsById(id)) throw  new IllegalArgumentException("해당 공연정보가 없습니다");
 
+        Event event = eventRepository.findById(eventId).orElseThrow(()
+                -> new IllegalArgumentException("해당 이벤트가 없습니다"));
+
+        event.setIsDeleted(true);
+    }
 }

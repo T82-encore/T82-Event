@@ -26,4 +26,11 @@ public class EventController {
         eventService.updateEvent(id,eventId,eventUpdateDto);
     }
 
+    @DeleteMapping("{eventInfoId}/events/{eventId}")
+    public void deleteEvent(@PathVariable("eventInfoId") Long id
+            ,@PathVariable("eventId") Long eventId){
+        eventService.deleteEvent(id,eventId);
+    }
+
+
 }
