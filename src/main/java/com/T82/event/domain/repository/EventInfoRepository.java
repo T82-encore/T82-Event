@@ -12,6 +12,6 @@ import java.util.Optional;
 
 public interface EventInfoRepository extends JpaRepository<EventInfo, Long> {
     //현재 시간으로 예매시간이 빠른순으로 정렬
-    @Query(value = "SELECT * FROM event_infos WHERE book_start_time > : now ORDER BY book_start_time DESC LIMIT 10", nativeQuery = true)
+    @Query(value = "SELECT * FROM event_infos WHERE book_start_time > : now ORDER BY book_start_time ASC LIMIT 10", nativeQuery = true)
     List<EventInfo> findComingEvents(@Param("now") LocalDateTime now);
 }
