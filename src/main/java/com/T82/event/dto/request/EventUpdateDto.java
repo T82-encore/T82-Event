@@ -1,4 +1,4 @@
-package com.T82.event.dto;
+package com.T82.event.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,7 +1,10 @@
 package com.T82.event.service;
 
-import com.T82.event.dto.EventCreateDto;
-import com.T82.event.dto.EventUpdateDto;
+import com.T82.event.dto.request.EventCreateDto;
+import com.T82.event.dto.request.EventUpdateDto;
+import com.T82.event.dto.response.EventGetEarliestOpenTicket;
+
+import java.util.List;
 
 
 public interface EventService {
@@ -10,4 +13,6 @@ public interface EventService {
     void updateEvent(Long id, Long eventId, EventUpdateDto eventUpdateDto);
 
     void deleteEvent(Long id, Long eventId);
+
+    List<EventGetEarliestOpenTicket> getEarliestOpenEventInfo();
 }

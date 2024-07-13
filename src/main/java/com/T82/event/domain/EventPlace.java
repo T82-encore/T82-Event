@@ -2,13 +2,17 @@ package com.T82.event.domain;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
 @Table(name = "Event_Places")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class EventPlace {
 
     @Id

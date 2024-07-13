@@ -1,7 +1,9 @@
 package com.T82.event.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,6 +12,8 @@ import java.util.Locale;
 @Entity
 @Table(name = "Event_Infos")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class EventInfo {
 
     @Id

@@ -1,8 +1,8 @@
 package com.T82.event.service.impl;
 
+
 import com.T82.event.domain.Event;
 import com.T82.event.domain.EventInfo;
-import com.T82.event.domain.repository.CategoryRepository;
 import com.T82.event.domain.repository.EventInfoRepository;
 import com.T82.event.domain.repository.EventRepository;
 import com.T82.event.dto.request.EventCreateDto;
@@ -22,7 +22,6 @@ public class EventServiceImpl implements EventService {
 
     private final EventRepository eventRepository;
     private final EventInfoRepository eventInfoRepository;
-
     @Override
     public void createEvent(Long id, EventCreateDto eventCreateDto) {
         EventInfo eventInfo = eventInfoRepository.findById(id).orElseThrow(()
