@@ -2,14 +2,19 @@ package com.T82.event.service.impl;
 
 import com.T82.event.domain.Event;
 import com.T82.event.domain.EventInfo;
+import com.T82.event.domain.repository.CategoryRepository;
 import com.T82.event.domain.repository.EventInfoRepository;
 import com.T82.event.domain.repository.EventRepository;
-import com.T82.event.dto.EventCreateDto;
-import com.T82.event.dto.EventUpdateDto;
+import com.T82.event.dto.request.EventCreateDto;
+import com.T82.event.dto.request.EventUpdateDto;
+import com.T82.event.dto.response.EventGetEarliestOpenTicket;
 import com.T82.event.service.EventService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +22,7 @@ public class EventServiceImpl implements EventService {
 
     private final EventRepository eventRepository;
     private final EventInfoRepository eventInfoRepository;
+
     @Override
     public void createEvent(Long id, EventCreateDto eventCreateDto) {
         EventInfo eventInfo = eventInfoRepository.findById(id).orElseThrow(()
@@ -33,6 +39,8 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findById(eventId).orElseThrow(()
                 -> new IllegalArgumentException("해당 이벤트가 없습니다"));
 
+        if(event.getIsDeleted()) throw new IllegalArgumentException("해당 이벤트가 없습니다");
+
         event.setEventStartTime(eventUpdateDto.getEventStartTime());
         event.setBookEndTime(eventUpdateDto.getBookEndTime());
     }
@@ -46,5 +54,12 @@ public class EventServiceImpl implements EventService {
                 -> new IllegalArgumentException("해당 이벤트가 없습니다"));
 
         event.setIsDeleted(true);
+    }
+
+    @Override
+    public List<EventGetEarliestOpenTicket> getEarliestOpenEventInfo() {
+        List<EventInfo> comingEvents = eventInfoRepository.findComingEvents(LocalDateTime.now());
+
+        return comingEvents.stream().map(EventGetEarliestOpenTicket :: fromEntity).toList();
     }
 }
