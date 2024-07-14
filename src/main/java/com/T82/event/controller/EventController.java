@@ -3,6 +3,7 @@ package com.T82.event.controller;
 import com.T82.event.dto.request.EventCreateDto;
 import com.T82.event.dto.request.EventUpdateDto;
 import com.T82.event.dto.response.EventGetEarliestOpenTicket;
+import com.T82.event.dto.response.EventGetInfoList;
 import com.T82.event.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -42,5 +43,15 @@ public class EventController {
 
         return eventService.getEarliestOpenEventInfo();
     }
+    /**
+     * 특정 공연 정보의 이벤트 리스트 리턴
+     **/
+    @GetMapping("{eventInfoId}")
+    public List<EventGetInfoList> getInfoList(@PathVariable("eventInfoId") Long id){
+
+        return eventService.getInfoList(id);
+    }
+
+
 
 }
