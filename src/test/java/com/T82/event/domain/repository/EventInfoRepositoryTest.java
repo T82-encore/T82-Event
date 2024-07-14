@@ -68,4 +68,39 @@ class EventInfoRepositoryTest {
             }
         }
     }
+
+    @Nested
+    @Transactional
+    class 현재_오픈된_티켓_중에서_판매량이_가장_많은_공연정보_10개_출력 {
+        @BeforeEach
+        void setUp() {
+            for(int l = 1; l < 5; l++) {
+                for(int i = 4; i < 10; i++) {
+                    EventInfo eventInfo = new EventInfoRequest(
+                            "테스트 제목"+l+i,
+                            "테스트 내용"+l+i,
+                            "174분",
+                            "18세",
+                            LocalDateTime.of(2024, 8, l, i, 0),
+                            1L,
+                            (long) i
+                    ).toEntity();
+                    eventInfo.setSellCount(l * 100 + l * i);
+                    eventInfoRepository.save(eventInfo);
+                }
+            }
+            entityManager.flush();
+            entityManager.clear();
+        }
+        @Test
+        void 성공() {
+            //given & when
+            List<EventInfo> list = eventInfoRepository.findTop10BySellCountDesc(PageRequest.of(0, 10));
+            //then
+            assertTrue(list.size() <= 10 && list.size() >= 5);
+            for(int i = 0; i < list.size() - 1; i++) {
+                assertTrue(list.get(i).getSellCount() >= list.get(i+1).getSellCount());
+            }
+        }
+    }
 }
