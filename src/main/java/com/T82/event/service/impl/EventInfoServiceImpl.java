@@ -74,6 +74,10 @@ public class EventInfoServiceImpl implements EventInfoService {
 
     @Override
     public List<EventInfoListResponse> getTopSellingEvents() {
-        return List.of();
+        return eventInfoRepository
+                .findTop10BySellCountDesc(PageRequest.of(0, 10))
+                .stream()
+                .map(EventInfoListResponse::from)
+                .toList();
     }
 }

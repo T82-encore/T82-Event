@@ -42,6 +42,7 @@ public class EventInfo {
 
     @Column(name = "sellCount")
     @Builder.Default
+    @Setter
     private Integer sellCount = 0;
 
     @Column(name = "bookStartTime")

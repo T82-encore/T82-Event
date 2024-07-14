@@ -14,4 +14,6 @@ public interface EventInfoRepository extends JpaRepository<EventInfo, Long> {
     List<EventInfo> findByCategoryIds(@Param("categoryIds") List<Long> categoryIds, PageRequest pageRequest);
     @Query("SELECT e FROM EventInfo e WHERE e.bookStartTime > :currentDateTime AND e.category.categoryId IN :categoryIds ORDER BY e.bookStartTime ASC")
     List<EventInfo> findNextUpcomingEvents(@Param("categoryIds") List<Long> categoryIds, PageRequest pageRequest, LocalDateTime currentDateTime);
+    @Query("SELECT e FROM EventInfo e WHERE e.deleted = false ORDER BY e.sellCount DESC")
+    List<EventInfo> findTop10BySellCountDesc(PageRequest pageRequest);
 }
