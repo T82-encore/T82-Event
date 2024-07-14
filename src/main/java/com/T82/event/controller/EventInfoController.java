@@ -31,4 +31,8 @@ public class EventInfoController {
     public List<EventInfoListResponse> getEventInfoListByCategoryId(@PathVariable Long categoryId) {
         return eventInfoService.getEventInfoListByHighCategoryId(categoryId);
     }
+    @GetMapping("genre/{categoryId}/earliest-ticket")
+    public List<EventInfoListResponse> getNextUpcomingEvents(@PathVariable Long categoryId) {
+        return eventInfoService.getNextUpcomingEvents(categoryId);
+    }
 }

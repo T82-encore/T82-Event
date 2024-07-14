@@ -58,4 +58,9 @@ public class EventInfoServiceImpl implements EventInfoService {
                 .map(EventInfoListResponse::from)
                 .toList();
     }
+
+    @Override
+    public List<EventInfoListResponse> getNextUpcomingEvents(Long categoryId) {
+        return List.of();
+    }
 }

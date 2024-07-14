@@ -11,4 +11,5 @@ public interface EventInfoService {
     void updateEventInfo(Long id, UpdateEventInfoRequest request);
     void deleteEventInfo(Long id);
     List<EventInfoListResponse> getEventInfoListByHighCategoryId(Long id);
+    List<EventInfoListResponse> getNextUpcomingEvents(Long categoryId);
 }
