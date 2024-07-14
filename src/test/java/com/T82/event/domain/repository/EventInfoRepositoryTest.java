@@ -86,6 +86,7 @@ class EventInfoRepositoryTest {
                             (long) i
                     ).toEntity();
                     eventInfo.setSellCount(l * 100 + l * i);
+                    if(i % 3 == 0) eventInfo.setDeleted(true);
                     eventInfoRepository.save(eventInfo);
                 }
             }
@@ -100,6 +101,7 @@ class EventInfoRepositoryTest {
             assertTrue(list.size() <= 10 && list.size() >= 5);
             for(int i = 0; i < list.size() - 1; i++) {
                 assertTrue(list.get(i).getSellCount() >= list.get(i+1).getSellCount());
+                assertFalse(list.get(i).isDeleted());
             }
         }
     }
