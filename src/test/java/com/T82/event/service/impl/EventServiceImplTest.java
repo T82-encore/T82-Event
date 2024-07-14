@@ -9,6 +9,7 @@ import com.T82.event.domain.repository.EventRepository;
 import com.T82.event.dto.request.EventCreateDto;
 import com.T82.event.dto.request.EventUpdateDto;
 import com.T82.event.dto.response.EventGetEarliestOpenTicket;
+import com.T82.event.dto.response.EventGetInfoList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,6 +44,8 @@ class EventServiceImplTest {
 
     private List<EventInfo> eventInfoList;
 
+    private List<Event> eventList;
+
     private LocalDateTime currentTime;
 
     @BeforeEach
@@ -71,6 +74,20 @@ class EventServiceImplTest {
                     null
             ));
         }
+
+        eventList = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            eventList.add(new Event(
+                    (long) (i + 1),
+                    LocalDateTime.now().plusDays(10),
+                    LocalDateTime.now().plusDays(5),
+                    false,
+                    false,
+                    0L,
+                    eventInfo
+            ));
+        }
+
         eventInfo = new EventInfo(1L, "단콘" ,"콘서트임", 8.5, 120, "12세 관람가", 0
                 , LocalDateTime.now(), null, category, eventPlace,null);
 
@@ -245,6 +262,35 @@ class EventServiceImplTest {
     }
 
     @Test
-    void getInfoList() {
+    void getInfoList_Success() {
+        // Given
+        Long eventInfoId = 1L;
+        when(eventInfoRepository.findById(eventInfoId)).thenReturn(Optional.of(eventInfo));
+        doReturn(eventList).when(eventRepository).findAllByEventInfoAndBookEndTimeAfterAndIsDeletedIsFalse(eq(eventInfo), any(LocalDateTime.class));
+
+        // When
+        List<EventGetInfoList> result = eventServiceImpl.getInfoList(eventInfoId);
+
+        // Then
+        verify(eventInfoRepository, times(1)).findById(eventInfoId);
+        verify(eventRepository, times(1)).findAllByEventInfoAndBookEndTimeAfterAndIsDeletedIsFalse(eq(eventInfo), any(LocalDateTime.class));
+        assertThat(result).isNotNull();
+        assertThat(result.size()).isEqualTo(eventList.size());
+    }
+
+
+    @Test
+    void getInfoList_EventInfoNotFound() {
+        // Given
+        Long eventInfoId = 99L;
+        when(eventInfoRepository.findById(eventInfoId)).thenReturn(Optional.empty());
+
+        // When
+        Throwable exception = assertThrows(IllegalArgumentException.class, () -> eventServiceImpl.getInfoList(eventInfoId));
+
+        // Then
+        verify(eventInfoRepository, times(1)).findById(eventInfoId);
+        verify(eventRepository, never()).findAllByEventInfoAndBookEndTimeAfterAndIsDeletedIsFalse(any(), any());
+        assertThat(exception.getMessage()).isEqualTo("해당 공연정보가 없습니다");
     }
 }
