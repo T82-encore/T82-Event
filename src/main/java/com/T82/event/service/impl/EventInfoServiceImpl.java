@@ -4,10 +4,13 @@ import com.T82.event.domain.EventInfo;
 import com.T82.event.domain.repository.EventInfoRepository;
 import com.T82.event.dto.request.EventInfoRequest;
 import com.T82.event.dto.request.UpdateEventInfoRequest;
+import com.T82.event.dto.response.EventInfoListResponse;
 import com.T82.event.service.EventInfoService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -39,5 +42,10 @@ public class EventInfoServiceImpl implements EventInfoService {
                 .findById(id)
                 .orElseThrow(IllegalArgumentException::new);
         eventInfo.setDeleted(true);
+    }
+
+    @Override
+    public List<EventInfoListResponse> getEventInfoListByHighCategoryId(Long id) {
+        return List.of();
     }
 }
