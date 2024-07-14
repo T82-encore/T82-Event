@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -61,6 +62,13 @@ public class EventInfoServiceImpl implements EventInfoService {
 
     @Override
     public List<EventInfoListResponse> getNextUpcomingEvents(Long categoryId) {
-        return List.of();
+        List<Long> subCategoryIds = categoryRepository.findSubCategoryIdsByParentId(categoryId);
+        if (subCategoryIds.isEmpty()) throw new IllegalArgumentException("잘못된 부모 카테고리입니다");
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        return eventInfoRepository
+                .findNextUpcomingEvents(subCategoryIds, PageRequest.of(0, 10), currentDateTime)
+                .stream()
+                .map(EventInfoListResponse::from)
+                .toList();
     }
 }
