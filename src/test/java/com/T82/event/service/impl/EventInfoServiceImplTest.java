@@ -1,6 +1,7 @@
 package com.T82.event.service.impl;
 
 import com.T82.event.domain.EventInfo;
+import com.T82.event.domain.repository.CategoryRepository;
 import com.T82.event.domain.repository.EventInfoRepository;
 import com.T82.event.dto.request.EventInfoRequest;
 import com.T82.event.dto.request.UpdateEventInfoRequest;
@@ -27,6 +28,8 @@ class EventInfoServiceImplTest {
     private EventInfoRepository eventInfoRepository;
     @Autowired
     private EntityManager entityManager;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Nested
     @Transactional
@@ -147,18 +150,21 @@ class EventInfoServiceImplTest {
     class 상위_카테고리_기준으로_판매량_10위까지_리스트로_전달 {
         @BeforeEach
         void setUp() {
-            for(int i = 4; i < 20; i++) {
-                EventInfoRequest request = new EventInfoRequest(
-                        "테스트 제목"+i,
-                        "테스트 내용"+i,
-                        "174분",
-                        "18세",
-                        LocalDateTime.of(2024, 5, 27, 16, 0),
-                        1L,
-                        (long) i
-                );
-                eventInfoRepository.save(request.toEntity());
+            for(int l = 1; l < 5; l++) {
+                for(int i = 4; i < 10; i++) {
+                    EventInfoRequest request = new EventInfoRequest(
+                            "테스트 제목"+l+i,
+                            "테스트 내용"+l+i,
+                            "174분",
+                            "18세",
+                            LocalDateTime.of(2024, 5, 27, 16, 0),
+                            1L,
+                            (long) i
+                    );
+                    eventInfoRepository.save(request.toEntity());
+                }
             }
+
             entityManager.flush();
             entityManager.clear();
         }
@@ -166,13 +172,23 @@ class EventInfoServiceImplTest {
         void 성공() {
             //given
             Long categoryId = 1L;
+            List<Long> categoryIds = categoryRepository.findSubCategoryIdsByParentId(categoryId);
             //when
             List<EventInfoListResponse> list = eventInfoService.getEventInfoListByHighCategoryId(categoryId);
             //then
             assertTrue(list.size() <= 10);
-            for(int i = 1; i < list.size(); i++) {
-                assertTrue(list.get(i).rating() >= list.get(i - 1).rating());
+            for(int i = 0; i < list.size() - 1; i++) {
+                assertTrue(list.get(i).rating() <= list.get(i + 1).rating());
+                assertTrue(categoryIds.contains(eventInfoRepository.findById(list.get(i).eventInfoId()).get().getCategory().getCategoryId()));
             }
+        }
+        @Test
+        void 실패_자식_카테고리_아이디_전달() {
+            //given
+            Long categoryId = 5L;
+            //when & then
+            assertThrows(IllegalArgumentException.class, () -> eventInfoService.getEventInfoListByHighCategoryId(categoryId));
+            //then
         }
     }
 }
