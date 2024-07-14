@@ -1,6 +1,7 @@
 package com.T82.event.service.impl;
 
 import com.T82.event.domain.EventInfo;
+import com.T82.event.domain.repository.CategoryRepository;
 import com.T82.event.domain.repository.EventInfoRepository;
 import com.T82.event.dto.request.EventInfoRequest;
 import com.T82.event.dto.request.UpdateEventInfoRequest;
@@ -8,6 +9,7 @@ import com.T82.event.dto.response.EventInfoListResponse;
 import com.T82.event.service.EventInfoService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EventInfoServiceImpl implements EventInfoService {
     private final EventInfoRepository eventInfoRepository;
+    private final CategoryRepository categoryRepository;
 
     @Override
     public void createEventInfo(EventInfoRequest request) {
@@ -46,6 +49,13 @@ public class EventInfoServiceImpl implements EventInfoService {
 
     @Override
     public List<EventInfoListResponse> getEventInfoListByHighCategoryId(Long id) {
-        return List.of();
+        List<Long> subCategoryIds = categoryRepository.findSubCategoryIdsByParentId(id);
+        if (subCategoryIds.isEmpty()) throw new IllegalArgumentException("잘못된 부모 카테고리입니다");
+
+        return eventInfoRepository
+                .findByCategoryIds(subCategoryIds, PageRequest.of(0, 10))
+                .stream()
+                .map(EventInfoListResponse::from)
+                .toList();
     }
 }
