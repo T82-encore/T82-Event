@@ -155,9 +155,56 @@ class EventServiceImplTest {
 
 
     @Test
-    void deleteEvent() {
+    void deleteEventSuccess() {
+        //given
+        Long eventInfoId = 1L;
+        Long eventId = 1L;
+        //when
+        when(eventInfoRepository.existsById(eventInfoId)).thenReturn(true);
+        when(eventRepository.findById(eventId)).thenReturn(Optional.of(event));
+        eventServiceImpl.deleteEvent(eventInfoId,eventId);
+        //then
+        verify(eventInfoRepository,times(1)).existsById(eventInfoId);
+        verify(eventRepository, times(1)).findById(eventId);
+        assertThat(event.getIsDeleted()).isTrue();
     }
 
+    @Test
+    void deleteEventFail_EventInfoNotFound() {
+        //given
+        Long eventInfoId = 99L;
+        Long eventId = 1L;
+
+        //when
+        when(eventInfoRepository.existsById(eventInfoId)).thenReturn(false);
+
+        // Act & Assert
+        Throwable exception = assertThrows(IllegalArgumentException.class, () -> eventServiceImpl.deleteEvent(eventInfoId, eventId));
+
+        //then
+        verify(eventInfoRepository, times(1)).existsById(eventInfoId);
+        verify(eventRepository, never()).findById(eventId);
+        assertThat(exception.getMessage()).isEqualTo("해당 공연정보가 없습니다");
+    }
+
+    @Test
+    void deleteEventFail_EventNotFound() {
+        //given
+        Long eventInfoId = 1L;
+        Long eventId = 99L;
+
+        //when
+        when(eventInfoRepository.existsById(eventInfoId)).thenReturn(true);
+        when(eventRepository.findById(eventId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        Throwable exception = assertThrows(IllegalArgumentException.class, () -> eventServiceImpl.deleteEvent(eventInfoId, eventId));
+
+        //then
+        verify(eventInfoRepository, times(1)).existsById(eventInfoId);
+        verify(eventRepository, times(1)).findById(eventId);
+        assertThat(exception.getMessage()).isEqualTo("해당 이벤트가 없습니다");
+    }
     @Test
     void getEarliestOpenEventInfo() {
     }
