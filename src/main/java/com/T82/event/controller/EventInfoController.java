@@ -35,4 +35,8 @@ public class EventInfoController {
     public List<EventInfoListResponse> getNextUpcomingEvents(@PathVariable Long categoryId) {
         return eventInfoService.getNextUpcomingEvents(categoryId);
     }
+    @GetMapping("rank")
+    public List<EventInfoListResponse> getTopSellingEvents() {
+        return eventInfoService.getTopSellingEvents();
+    }
 }

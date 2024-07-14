@@ -71,4 +71,9 @@ public class EventInfoServiceImpl implements EventInfoService {
                 .map(EventInfoListResponse::from)
                 .toList();
     }
+
+    @Override
+    public List<EventInfoListResponse> getTopSellingEvents() {
+        return List.of();
+    }
 }
