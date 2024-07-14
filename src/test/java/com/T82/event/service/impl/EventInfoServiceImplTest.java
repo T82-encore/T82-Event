@@ -109,6 +109,7 @@ class EventInfoServiceImplTest {
             assertThrows(IllegalArgumentException.class, () -> eventInfoService.updateEventInfo(failedId, request));
         }
     }
+
     @Nested
     @Transactional
     class 공연정보_삭제 {
@@ -145,6 +146,7 @@ class EventInfoServiceImplTest {
             assertThrows(IllegalArgumentException.class, () -> eventInfoService.deleteEventInfo(failedId));
         }
     }
+
     @Nested
     @Transactional
     class 상위_카테고리_기준으로_판매량_10위까지_리스트로_전달 {
@@ -189,6 +191,50 @@ class EventInfoServiceImplTest {
             //when & then
             assertThrows(IllegalArgumentException.class, () -> eventInfoService.getEventInfoListByHighCategoryId(categoryId));
             //then
+        }
+    }
+
+    @Nested
+    @Transactional
+    class 선택한_카테고리_하위_티켓_중에서_오픈일이_빠른_티켓_10개_전달 {
+        @BeforeEach
+        void setUp() {
+            for(int l = 1; l < 5; l++) {
+                for(int i = 4; i < 10; i++) {
+                    EventInfoRequest request = new EventInfoRequest(
+                            "테스트 제목"+l+i,
+                            "테스트 내용"+l+i,
+                            "174분",
+                            "18세",
+                            LocalDateTime.of(2024, 8, l, i, 0),
+                            1L,
+                            (long) i
+                    );
+                    eventInfoRepository.save(request.toEntity());
+                }
+            }
+            entityManager.flush();
+            entityManager.clear();
+        }
+        @Test
+        void 성공() {
+            //given
+            Long categoryId = 1L;
+            List<Long> categoryIds = categoryRepository.findSubCategoryIdsByParentId(categoryId);
+            //when
+            List<EventInfoListResponse> list = eventInfoService.getNextUpcomingEvents(categoryId);
+            //then
+            assertTrue(list.size() <= 10 && list.size() >= 5);
+            for(int i = 0; i < list.size() - 1; i++) {
+                assertTrue(categoryIds.contains(eventInfoRepository.findById(list.get(i).eventInfoId()).get().getCategory().getCategoryId()));
+            }
+        }
+        @Test
+        void 실패_자식_카테고리_아이디_전달() {
+            //given
+            Long categoryId = 5L;
+            //when & then
+            assertThrows(IllegalArgumentException.class, () -> eventInfoService.getNextUpcomingEvents(categoryId));
         }
     }
 }
