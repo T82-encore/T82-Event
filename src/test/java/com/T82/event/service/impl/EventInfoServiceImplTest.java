@@ -4,6 +4,7 @@ import com.T82.event.domain.EventInfo;
 import com.T82.event.domain.repository.EventInfoRepository;
 import com.T82.event.dto.request.EventInfoRequest;
 import com.T82.event.dto.request.UpdateEventInfoRequest;
+import com.T82.event.dto.response.EventInfoListResponse;
 import com.T82.event.service.EventInfoService;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -138,6 +140,39 @@ class EventInfoServiceImplTest {
             Long failedId = id + 1;
             //when & then
             assertThrows(IllegalArgumentException.class, () -> eventInfoService.deleteEventInfo(failedId));
+        }
+    }
+    @Nested
+    @Transactional
+    class 상위_카테고리_기준으로_판매량_10위까지_리스트로_전달 {
+        @BeforeEach
+        void setUp() {
+            for(int i = 4; i < 20; i++) {
+                EventInfoRequest request = new EventInfoRequest(
+                        "테스트 제목"+i,
+                        "테스트 내용"+i,
+                        "174분",
+                        "18세",
+                        LocalDateTime.of(2024, 5, 27, 16, 0),
+                        1L,
+                        (long) i
+                );
+                eventInfoRepository.save(request.toEntity());
+            }
+            entityManager.flush();
+            entityManager.clear();
+        }
+        @Test
+        void 성공() {
+            //given
+            Long categoryId = 1L;
+            //when
+            List<EventInfoListResponse> list = eventInfoService.getEventInfoListByHighCategoryId(categoryId);
+            //then
+            assertTrue(list.size() <= 10);
+            for(int i = 1; i < list.size(); i++) {
+                assertTrue(list.get(i).rating() >= list.get(i - 1).rating());
+            }
         }
     }
 }
