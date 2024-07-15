@@ -7,6 +7,9 @@ import com.T82.event.dto.response.EventInfoListResponse;
 import com.T82.event.dto.response.EventInfoResponse;
 import com.T82.event.service.EventInfoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,6 +43,13 @@ public class EventInfoController {
     @GetMapping("rank")
     public List<EventInfoListResponse> getTopSellingEvents() {
         return eventInfoService.getTopSellingEvents();
+    }
+    @GetMapping("genre/{categoryId}/events")
+    public Page<EventInfoListResponse> getEventInfosByCategoryId(
+            @PathVariable Long categoryId,
+            @PageableDefault(size = 10, page = 0) Pageable pageable
+    ) {
+        return eventInfoService.getEventInfosByCategoryId(categoryId, pageable);
     }
 
     /**

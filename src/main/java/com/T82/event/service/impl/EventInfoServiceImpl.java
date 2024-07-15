@@ -1,5 +1,6 @@
 package com.T82.event.service.impl;
 
+import com.T82.event.domain.Category;
 import com.T82.event.domain.EventInfo;
 import com.T82.event.domain.repository.CategoryRepository;
 import com.T82.event.domain.repository.EventInfoRepository;
@@ -11,7 +12,9 @@ import com.T82.event.dto.response.EventInfoResponse;
 import com.T82.event.service.EventInfoService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -83,6 +86,14 @@ public class EventInfoServiceImpl implements EventInfoService {
                 .toList();
     }
 
+    @Override
+    public Page<EventInfoListResponse> getEventInfosByCategoryId(Long categoryId, Pageable pageable) {
+        Category category = Category.builder().categoryId(categoryId).build();
+        return eventInfoRepository
+                .findAllByCategoryAndDeletedFalse(category, pageable)
+                .map(EventInfoListResponse::from);
+    }
+  
     @Override
     public List<EventGetEarliestOpenTicket> getEarliestOpenEventInfo() {
         List<EventInfo> comingEvents = eventInfoRepository.findComingEvents(LocalDateTime.now());
