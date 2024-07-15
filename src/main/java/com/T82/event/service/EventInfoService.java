@@ -3,6 +3,8 @@ package com.T82.event.service;
 import com.T82.event.dto.request.EventInfoRequest;
 import com.T82.event.dto.request.UpdateEventInfoRequest;
 import com.T82.event.dto.response.EventInfoListResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -13,5 +15,5 @@ public interface EventInfoService {
     List<EventInfoListResponse> getEventInfoListByHighCategoryId(Long id);
     List<EventInfoListResponse> getNextUpcomingEvents(Long categoryId);
     List<EventInfoListResponse> getTopSellingEvents();
-    List<EventInfoListResponse> getEventInfosByCategoryId(Long categoryId);
+    Page<EventInfoListResponse> getEventInfosByCategoryId(Long categoryId, Pageable pageable);
 }
