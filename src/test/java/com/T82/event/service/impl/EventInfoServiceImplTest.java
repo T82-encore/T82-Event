@@ -14,6 +14,9 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -267,6 +270,51 @@ class EventInfoServiceImplTest {
             List<EventInfoListResponse> list = eventInfoService.getTopSellingEvents();
             //then
             assertTrue(list.size() <= 10 && list.size() >= 5);
+        }
+    }
+
+    @Nested
+    @Transactional
+    class 하위_카테고리_별_공연정보_리스트_10개씩_페이징 {
+        @BeforeEach
+        void setUp() {
+            for(int l = 1; l < 17; l++) {
+                for(int i = 4; i < 8; i++) {
+                    EventInfo eventInfo = new EventInfoRequest(
+                            "테스트 제목"+l+i,
+                            "테스트 내용"+l+i,
+                            "174분",
+                            "18세",
+                            LocalDateTime.of(2024, 8, l, i, 0),
+                            1L,
+                            (long) i
+                    ).toEntity();
+                    if (l % 3 == 0) eventInfo.setDeleted(true);
+                    eventInfoRepository.save(eventInfo);
+                }
+            }
+            entityManager.flush();
+            entityManager.clear();
+        }
+        @Test
+        void 성공_1페이지() {
+            //given
+            Long categoryId = 5L;
+            Pageable pageable = PageRequest.of(0, 10);
+            //when
+            Page<EventInfoListResponse> page1 = eventInfoService.getEventInfosByCategoryId(categoryId, pageable);
+            //then
+            assertEquals(10, page1.getNumberOfElements());
+        }
+        @Test
+        void 성공_2페이지() {
+            //given
+            Long categoryId = 5L;
+            Pageable pageable = PageRequest.of(1, 10);
+            //when
+            Page<EventInfoListResponse> page1 = eventInfoService.getEventInfosByCategoryId(categoryId, pageable);
+            //then
+            assertEquals(1, page1.getNumberOfElements());
         }
     }
 }
