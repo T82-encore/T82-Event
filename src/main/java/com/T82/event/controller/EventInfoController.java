@@ -39,4 +39,8 @@ public class EventInfoController {
     public List<EventInfoListResponse> getTopSellingEvents() {
         return eventInfoService.getTopSellingEvents();
     }
+    @GetMapping("genre/{categoryId}/events")
+    public List<EventInfoListResponse> getEventInfosByCategoryId(@PathVariable Long categoryId) {
+        return eventInfoService.getEventInfosByCategoryId(categoryId);
+    }
 }

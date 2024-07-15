@@ -80,4 +80,9 @@ public class EventInfoServiceImpl implements EventInfoService {
                 .map(EventInfoListResponse::from)
                 .toList();
     }
+
+    @Override
+    public List<EventInfoListResponse> getEventInfosByCategoryId(Long categoryId) {
+        return List.of();
+    }
 }

@@ -13,4 +13,5 @@ public interface EventInfoService {
     List<EventInfoListResponse> getEventInfoListByHighCategoryId(Long id);
     List<EventInfoListResponse> getNextUpcomingEvents(Long categoryId);
     List<EventInfoListResponse> getTopSellingEvents();
+    List<EventInfoListResponse> getEventInfosByCategoryId(Long categoryId);
 }
