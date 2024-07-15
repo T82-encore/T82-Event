@@ -5,7 +5,9 @@ import com.T82.event.domain.repository.CategoryRepository;
 import com.T82.event.domain.repository.EventInfoRepository;
 import com.T82.event.dto.request.EventInfoRequest;
 import com.T82.event.dto.request.UpdateEventInfoRequest;
+import com.T82.event.dto.response.EventGetEarliestOpenTicket;
 import com.T82.event.dto.response.EventInfoListResponse;
+import com.T82.event.dto.response.EventInfoResponse;
 import com.T82.event.service.EventInfoService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -79,5 +81,20 @@ public class EventInfoServiceImpl implements EventInfoService {
                 .stream()
                 .map(EventInfoListResponse::from)
                 .toList();
+    }
+
+    @Override
+    public List<EventGetEarliestOpenTicket> getEarliestOpenEventInfo() {
+        List<EventInfo> comingEvents = eventInfoRepository.findComingEvents(LocalDateTime.now());
+
+        return comingEvents.stream().map(EventGetEarliestOpenTicket :: fromEntity).toList();
+    }
+
+    @Override
+    public EventInfoResponse getEventInfo(Long eventInfoId) {
+      EventInfo eventInfo =  eventInfoRepository.findById(eventInfoId).orElseThrow(()
+              -> new IllegalArgumentException("해당 공연정보가 없습니다."));
+
+        return EventInfoResponse.fromEntity(eventInfo);
     }
 }

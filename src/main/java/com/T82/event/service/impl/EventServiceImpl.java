@@ -57,13 +57,6 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventGetEarliestOpenTicket> getEarliestOpenEventInfo() {
-        List<EventInfo> comingEvents = eventInfoRepository.findComingEvents(LocalDateTime.now());
-
-        return comingEvents.stream().map(EventGetEarliestOpenTicket :: fromEntity).toList();
-    }
-
-    @Override
     public List<EventGetInfoList> getInfoList(Long eventInfoId) {
         EventInfo eventInfo = eventInfoRepository.findById(eventInfoId).orElseThrow(()
                 -> new IllegalArgumentException("해당 공연정보가 없습니다"));

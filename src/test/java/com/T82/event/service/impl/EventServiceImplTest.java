@@ -8,7 +8,6 @@ import com.T82.event.domain.repository.EventInfoRepository;
 import com.T82.event.domain.repository.EventRepository;
 import com.T82.event.dto.request.EventCreateDto;
 import com.T82.event.dto.request.EventUpdateDto;
-import com.T82.event.dto.response.EventGetEarliestOpenTicket;
 import com.T82.event.dto.response.EventGetInfoList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -64,10 +63,11 @@ class EventServiceImplTest {
                     "단콘 " + (i + 1),
                     "콘서트임",
                     8.5,
-                    120,
+                    "120분",
                     "12세 관람가",
                     0,
                     LocalDateTime.now().plusDays(i),
+                    false,
                     null,
                     category,
                     eventPlace,
@@ -88,8 +88,8 @@ class EventServiceImplTest {
             ));
         }
 
-        eventInfo = new EventInfo(1L, "단콘" ,"콘서트임", 8.5, 120, "12세 관람가", 0
-                , LocalDateTime.now(), null, category, eventPlace,null);
+        eventInfo = new EventInfo(1L, "단콘" ,"콘서트임", 8.5, "120분", "12세 관람가", 0
+                , LocalDateTime.now(),false, null, category, eventPlace,null);
 
         event = new Event(1L, LocalDateTime.now().plusDays(10), LocalDateTime.now().plusDays(5),false,false,0L ,eventInfo);
 
@@ -247,18 +247,6 @@ class EventServiceImplTest {
         verify(eventInfoRepository, times(1)).existsById(eventInfoId);
         verify(eventRepository, times(1)).findById(eventId);
         assertThat(exception.getMessage()).isEqualTo("해당 이벤트가 없습니다");
-    }
-    @Test
-    void getEarliestOpenEventInfo() {
-        // given
-        doReturn(eventInfoList).when(eventInfoRepository).findComingEvents(any(LocalDateTime.class));
-
-        // when
-        List<EventGetEarliestOpenTicket> result = eventServiceImpl.getEarliestOpenEventInfo();
-
-        // then
-        verify(eventInfoRepository, times(1)).findComingEvents(any(LocalDateTime.class));
-        assertThat(result).isNotNull();
     }
 
     @Test

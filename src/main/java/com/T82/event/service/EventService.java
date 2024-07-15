@@ -15,7 +15,5 @@ public interface EventService {
 
     void deleteEvent(Long id, Long eventId);
 
-    List<EventGetEarliestOpenTicket> getEarliestOpenEventInfo();
-
     List<EventGetInfoList> getInfoList(Long eventInfoId);
 }
