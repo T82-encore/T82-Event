@@ -6,6 +6,7 @@ import com.T82.event.domain.repository.EventInfoRepository;
 import com.T82.event.dto.request.EventInfoRequest;
 import com.T82.event.dto.request.UpdateEventInfoRequest;
 import com.T82.event.dto.response.EventInfoListResponse;
+import com.T82.event.dto.response.EventInfoResponse;
 import com.T82.event.service.EventInfoService;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -315,6 +316,36 @@ class EventInfoServiceImplTest {
             Page<EventInfoListResponse> page1 = eventInfoService.getEventInfosByCategoryId(categoryId, pageable);
             //then
             assertEquals(1, page1.getNumberOfElements());
+        }
+    }
+  
+    @Nested
+    @Transactional
+    class 공연정보_반환 {
+
+        @Test
+        void 성공() {
+            //given
+            Long eventInfoId = 1L;
+            EventInfo eventInfo = eventInfoRepository.findById(eventInfoId).get();
+            //when
+            EventInfoResponse response = eventInfoService.getEventInfo(eventInfoId);
+            //then
+            assertNotNull(response);
+            assertEquals(eventInfo.getTitle(), response.getTitle());
+            assertEquals(eventInfo.getDescription(), response.getDescription());
+            assertEquals(eventInfo.getRunningTime(), response.getRunningTime());
+            assertEquals(eventInfo.getRating(), response.getRating());
+            assertEquals(eventInfo.getAgeRestriction(), response.getAgeRestriction());
+            assertEquals(eventInfo.getEventPlace().getPlaceName(), response.getPlaceName());
+            assertEquals(eventInfo.getEventPlace().getTotalSeat(), response.getTotalSeat());
+        }
+        @Test
+        void 실패_데이터_없음() {
+            //given
+            Long eventInfoId = 999L;
+            //when & then
+            assertThrows(IllegalArgumentException.class, () -> eventInfoService.getEventInfo(eventInfoId));
         }
     }
 }
