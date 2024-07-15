@@ -2,7 +2,9 @@ package com.T82.event.controller;
 
 import com.T82.event.dto.request.EventInfoRequest;
 import com.T82.event.dto.request.UpdateEventInfoRequest;
+import com.T82.event.dto.response.EventGetEarliestOpenTicket;
 import com.T82.event.dto.response.EventInfoListResponse;
+import com.T82.event.dto.response.EventInfoResponse;
 import com.T82.event.service.EventInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -38,5 +40,19 @@ public class EventInfoController {
     @GetMapping("rank")
     public List<EventInfoListResponse> getTopSellingEvents() {
         return eventInfoService.getTopSellingEvents();
+    }
+
+    /**
+     * 오늘 날짜 이후로 가까운 이벤트 정보 리스트 10개 보내기
+     **/
+    @GetMapping()
+    public List<EventGetEarliestOpenTicket> getEarliestOpenTickets(){
+        return eventInfoService.getEarliestOpenEventInfo();
+    }
+
+    @GetMapping("/{eventInfoId}")
+    public EventInfoResponse getEventInfo(@PathVariable("eventInfoId") Long eventInfoId){
+
+        return eventInfoService.getEventInfo(eventInfoId);
     }
 }
