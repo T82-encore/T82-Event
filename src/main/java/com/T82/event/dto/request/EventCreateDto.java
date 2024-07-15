@@ -1,4 +1,4 @@
-package com.T82.event.dto;
+package com.T82.event.dto.request;
 
 import com.T82.event.domain.Event;
 import com.T82.event.domain.EventInfo;

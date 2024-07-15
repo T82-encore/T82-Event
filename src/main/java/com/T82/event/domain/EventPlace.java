@@ -4,15 +4,16 @@ package com.T82.event.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+
 import java.util.List;
 
 @Entity
 @Table(name = "Event_Places")
-@Data
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+
 public class EventPlace {
 
     @Id
