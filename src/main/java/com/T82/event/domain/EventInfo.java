@@ -1,9 +1,8 @@
 package com.T82.event.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -11,9 +10,10 @@ import java.util.Locale;
 
 @Entity
 @Table(name = "Event_Infos")
-@Data
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class EventInfo {
 
     @Id
@@ -22,25 +22,38 @@ public class EventInfo {
     private Long eventInfoId;
 
     @Column(name = "title")
+    @Setter
     private String title;
 
     @Column(name = "description")
+    @Setter
     private String description;
 
     @Column(name = "rating")
-    private Double rating;
+    @Builder.Default
+    private Double rating = 0.0;
 
     @Column(name = "runningTime")
-    private Integer runningTime;
+    @Setter
+    private String runningTime;
 
     @Column(name = "ageRestriction")
+    @Setter
     private String ageRestriction;
 
     @Column(name = "sellCount")
-    private Integer sellCount;
+    @Builder.Default
+    @Setter
+    private Integer sellCount = 0;
 
     @Column(name = "bookStartTime")
+    @Setter
     private LocalDateTime bookStartTime;
+
+    @Column(name = "isDeleted")
+    @Builder.Default
+    @Setter
+    private boolean deleted = false;
 
     @OneToMany(mappedBy = "eventInfo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Event> events;

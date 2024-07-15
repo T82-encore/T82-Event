@@ -1,5 +1,9 @@
 package com.T82.event.dto.request;
 
+import com.T82.event.domain.Category;
+import com.T82.event.domain.EventInfo;
+import com.T82.event.domain.EventPlace;
+
 import java.time.LocalDateTime;
 
 public record EventInfoRequest(
@@ -11,4 +15,15 @@ public record EventInfoRequest(
         Long placeId,
         Long categoryId
 ) {
+    public EventInfo toEntity() {
+        return EventInfo.builder()
+                .title(title)
+                .description(description)
+                .runningTime(runningTime)
+                .ageRestriction(ageRestriction)
+                .bookStartTime(bookStartTime)
+                .eventPlace(EventPlace.builder().placeId(placeId).build())
+                .category(Category.builder().categoryId(categoryId).build())
+                .build();
+    }
 }
