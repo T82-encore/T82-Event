@@ -28,6 +28,7 @@ public class EventInfoServiceImpl implements EventInfoService {
 
     @Override
     public void createEventInfo(EventInfoRequest request) {
+
         eventInfoRepository.save(request.toEntity());
     }
 
