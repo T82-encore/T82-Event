@@ -1,6 +1,8 @@
 package com.T82.event.domain;
 
+import com.T82.event.dto.request.EventUpdateDto;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -20,18 +22,15 @@ public class Event {
     private Long eventId;
 
     @Column (name = "eventStartTime")
-    @Setter
     private LocalDateTime eventStartTime;
 
     @Column (name = "bookEndTime")
-    @Setter
     private LocalDateTime bookEndTime;
 
     @Column(name = "isSoldOut")
     private Boolean isSoldOut;
 
     @Column(name = "isDeleted")
-    @Setter
     private Boolean isDeleted;
 
     @Column(name = "eventSellCount")
@@ -54,4 +53,20 @@ public class Event {
             eventSellCount = 0L;
         }
     }
+
+    @Transactional
+    public void update(EventUpdateDto eventUpdateDto){
+        if (eventUpdateDto.getEventStartTime() != null) {
+            this.setEventStartTime(eventUpdateDto.getEventStartTime());
+        }
+        if (eventUpdateDto.getBookEndTime() != null) {
+            this.setBookEndTime(eventUpdateDto.getBookEndTime());
+        }
+    }
+
+    @Transactional
+    public void delete(){
+        this.setIsDeleted(true);
+    }
+
 }

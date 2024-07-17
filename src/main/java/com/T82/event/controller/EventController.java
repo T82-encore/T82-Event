@@ -17,31 +17,31 @@ public class EventController {
     private final EventService eventService;
 
     @PostMapping("{eventInfoId}/events")
-    public void createEvent(@PathVariable("eventInfoId") Long id
+    public void createEvent(@PathVariable("eventInfoId") Long eventInfoId
             ,@RequestBody EventCreateDto eventCreateDto){
-        eventService.createEvent(id,eventCreateDto);
+        eventService.createEvent(eventInfoId,eventCreateDto);
     }
 
     @PutMapping("{eventInfoId}/events/{eventId}")
-    public void updateEvent(@PathVariable("eventInfoId") Long id
+    public void updateEvent(@PathVariable("eventInfoId") Long eventInfoId
             ,@PathVariable("eventId") Long eventId
             ,@RequestBody EventUpdateDto eventUpdateDto){
-        eventService.updateEvent(id,eventId,eventUpdateDto);
+        eventService.updateEvent(eventInfoId,eventId,eventUpdateDto);
     }
 
     @DeleteMapping("{eventInfoId}/events/{eventId}")
-    public void deleteEvent(@PathVariable("eventInfoId") Long id
+    public void deleteEvent(@PathVariable("eventInfoId") Long eventInfoId
             ,@PathVariable("eventId") Long eventId){
-        eventService.deleteEvent(id,eventId);
+        eventService.deleteEvent(eventInfoId,eventId);
     }
 
     /**
      * 특정 공연 정보의 이벤트 리스트 리턴
      **/
     @GetMapping("{eventInfoId}/events")
-    public List<EventGetInfoList> getInfoList(@PathVariable("eventInfoId") Long id){
+    public List<EventGetInfoList> getInfoList(@PathVariable("eventInfoId") Long eventInfoId){
 
-        return eventService.getInfoList(id);
+        return eventService.getInfoList(eventInfoId);
     }
 
 
