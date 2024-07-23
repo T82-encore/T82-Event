@@ -7,6 +7,7 @@ import com.T82.event.domain.repository.EventInfoRepository;
 import com.T82.event.domain.repository.EventRepository;
 import com.T82.event.dto.request.EventCreateDto;
 import com.T82.event.dto.request.EventUpdateDto;
+import com.T82.event.dto.response.EventDetail;
 import com.T82.event.dto.response.EventGetEarliestOpenTicket;
 import com.T82.event.dto.response.EventGetInfoList;
 import com.T82.event.service.EventService;
@@ -64,6 +65,11 @@ public class EventServiceImpl implements EventService {
         List<Event> event = eventRepository.findAllByEventInfoAndBookEndTimeAfterAndIsDeletedIsFalse(eventInfo,LocalDateTime.now());
 
         return event.stream().map(EventGetInfoList :: fromEntity).toList();
+    }
+
+    @Override
+    public EventDetail getEventDetail(Long eventId) {
+        return eventRepository.findEventDetailByEventId(eventId);
     }
 
 
