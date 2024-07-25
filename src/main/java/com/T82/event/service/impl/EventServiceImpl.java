@@ -1,18 +1,20 @@
 package com.T82.event.service.impl;
 
 
+import com.T82.event.config.kafka.EventProducer;
 import com.T82.event.domain.Event;
 import com.T82.event.domain.EventInfo;
 import com.T82.event.domain.repository.EventInfoRepository;
 import com.T82.event.domain.repository.EventRepository;
 import com.T82.event.dto.request.EventCreateDto;
 import com.T82.event.dto.request.EventUpdateDto;
-import com.T82.event.dto.response.EventDetail;
-import com.T82.event.dto.response.EventGetEarliestOpenTicket;
-import com.T82.event.dto.response.EventGetInfoList;
+import com.T82.event.dto.response.*;
 import com.T82.event.service.EventService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.kafka.clients.consumer.internals.events.EventProcessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,14 +24,25 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
 
+    private static final Logger log = LoggerFactory.getLogger(EventServiceImpl.class);
     private final EventRepository eventRepository;
     private final EventInfoRepository eventInfoRepository;
+    private final EventProducer eventProducer;
+
     @Override
     public void createEvent(Long id, EventCreateDto eventCreateDto) {
         EventInfo eventInfo = eventInfoRepository.findById(id).orElseThrow(()
                 -> new IllegalArgumentException("해당 공연정보가 없습니다"));
 
-        eventRepository.save(eventCreateDto.toEntity(eventInfo));
+        Event event = eventRepository.save(eventCreateDto.toEntity(eventInfo));
+        eventProducer.send(
+                "create",
+                new EventDto(
+                    event.getEventId(),
+                    eventInfo.getEventPlace(),
+                    eventInfoRepository.test(eventInfo.getEventInfoId())
+                )
+        );
     }
 
     @Override

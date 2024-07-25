@@ -33,6 +33,12 @@ public class EventPlace {
     @Column(name = "seatAvailable")
     private Boolean seatAvailable;
 
+    @Column(name = "totalRow")
+    private Integer totalRow;
+
+    @Column(name = "totalCol")
+    private Integer totalCol;
+
     @OneToMany(mappedBy = "eventPlace", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EventInfo> eventInfos;
 

@@ -2,6 +2,8 @@ package com.T82.event.domain.repository;
 
 import com.T82.event.domain.Category;
 import com.T82.event.domain.EventInfo;
+import com.T82.event.dto.response.EventDto;
+import com.T82.event.dto.response.SectionDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,4 +29,12 @@ public interface EventInfoRepository extends JpaRepository<EventInfo, Long> {
     List<EventInfo> findTop10BySellCountDesc(PageRequest pageRequest);
 //    @Query("SELECT e FROM EventInfo e WHERE e.category.categoryId = :categoryId OR e.category.parentId = :categoryId")
     Page<EventInfo> findAllByCategoryAndDeletedFalse(Category category, Pageable pageable);
+    @Query("select s.sectionName sectionName, s.startRow startRow, s.startCol startCol, s.seatRowCount rowNum, " +
+            "s.seatColumnsCount colNum, sgi.price price, s.seatRowCount * s.seatColumnsCount sectionTotalSeat " +
+            "FROM EventInfo ei " +
+            "JOIN EventPlace ep ON ei.eventPlace.placeId = ep.placeId " +
+            "JOIN Section s ON ep.placeId = s.eventPlace.placeId " +
+            "JOIN SeatGradeInfo sgi ON s.sectionId = sgi.section.sectionId AND ei.eventInfoId = sgi.eventInfo.eventInfoId " +
+            "WHERE ei.eventInfoId = :eventInfoId")
+    List<SectionDto> test(@Param("eventInfoId") Long eventInfoId);
 }
