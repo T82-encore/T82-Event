@@ -55,6 +55,9 @@ public class EventInfo {
     @Setter
     private LocalDateTime bookStartTime;
 
+    @Column(name = "dibCount")
+    private Long dibCount;
+
     @Column(name = "isDeleted")
     @Builder.Default
     @Setter
@@ -83,4 +86,8 @@ public class EventInfo {
         this.reviewCount -= 1;
         this.rating -= rating;
     }
+
+    public void addDib() { this.dibCount += 1; }
+
+    public void deleteDib() {this.dibCount -= 1;}
 }
