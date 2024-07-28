@@ -10,8 +10,11 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
+
+    Optional<Event> findByEventIdAndIsDeletedFalse(Long eventId);
 
     List<Event> findAllByEventInfoAndBookEndTimeAfterAndIsDeletedIsFalse(EventInfo eventInfo , LocalDateTime currentTime);
     @Query("select ei.eventInfoId eventInfoId, ei.title title, e.eventStartTime eventStartTime from Event e join EventInfo ei on e.eventInfo.eventInfoId = ei.eventInfoId where e.eventId = :eventId")

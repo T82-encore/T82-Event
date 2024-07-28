@@ -50,13 +50,10 @@ public class EventServiceImpl implements EventService {
     public void updateEvent(Long id, Long eventId, EventUpdateDto eventUpdateDto) {
         if(!eventInfoRepository.existsById(id)) throw  new IllegalArgumentException("해당 공연정보가 없습니다");
 
-        Event event = eventRepository.findById(eventId).orElseThrow(()
+        Event event = eventRepository.findByEventIdAndIsDeletedFalse(eventId).orElseThrow(()
                 -> new IllegalArgumentException("해당 이벤트가 없습니다"));
 
-        if(event.getIsDeleted()) throw new IllegalArgumentException("해당 이벤트가 없습니다");
-
-        event.setEventStartTime(eventUpdateDto.getEventStartTime());
-        event.setBookEndTime(eventUpdateDto.getBookEndTime());
+        event.update(eventUpdateDto);
     }
 
     @Override
@@ -64,10 +61,10 @@ public class EventServiceImpl implements EventService {
     public void deleteEvent(Long id, Long eventId) {
         if(!eventInfoRepository.existsById(id)) throw  new IllegalArgumentException("해당 공연정보가 없습니다");
 
-        Event event = eventRepository.findById(eventId).orElseThrow(()
+        Event event = eventRepository.findByEventIdAndIsDeletedFalse(eventId).orElseThrow(()
                 -> new IllegalArgumentException("해당 이벤트가 없습니다"));
 
-        event.setIsDeleted(true);
+        event.delete();
     }
 
     @Override

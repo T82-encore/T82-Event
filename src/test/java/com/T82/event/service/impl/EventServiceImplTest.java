@@ -133,13 +133,13 @@ class EventServiceImplTest {
         EventUpdateDto eventUpdateDto = new EventUpdateDto(LocalDateTime.now().plusDays(2), LocalDateTime.now().plusDays(15));
 
         when(eventInfoRepository.existsById(eventInfoId)).thenReturn(true);
-        when(eventRepository.findById(eventId)).thenReturn(Optional.of(event));
+        when(eventRepository.findByEventIdAndIsDeletedFalse(eventId)).thenReturn(Optional.of(event));
 
         // When
         eventServiceImpl.updateEvent(eventInfoId, eventId, eventUpdateDto);
 
         // Then
-        verify(eventRepository, times(1)).findById(eventId);
+        verify(eventRepository, times(1)).findByEventIdAndIsDeletedFalse(eventId);
         assertThat(event.getEventStartTime()).isEqualTo(eventUpdateDto.getEventStartTime());
         assertThat(event.getBookEndTime()).isEqualTo(eventUpdateDto.getBookEndTime());
     }
@@ -157,27 +157,10 @@ class EventServiceImplTest {
         Throwable exception = assertThrows(IllegalArgumentException.class, () -> eventServiceImpl.updateEvent(eventInfoId, eventId, eventUpdateDto));
 
         // Then
-        verify(eventRepository, never()).findById(eventId);
+        verify(eventRepository, never()).findByEventIdAndIsDeletedFalse(eventId);
         assertThat(exception.getMessage()).isEqualTo("해당 공연정보가 없습니다");
     }
 
-    @Test
-    void updateEventFail_EventNotFound() {
-        //given
-        Long eventInfoId = 1L;
-        Long eventId = 99L;
-        EventUpdateDto eventUpdateDto = new EventUpdateDto(LocalDateTime.now().plusDays(2), LocalDateTime.now().plusDays(15));
-
-        when(eventInfoRepository.existsById(eventInfoId)).thenReturn(true);
-        when(eventRepository.findById(eventId)).thenReturn(Optional.empty());
-
-        // When
-        Throwable exception = assertThrows(IllegalArgumentException.class, () -> eventServiceImpl.updateEvent(eventInfoId, eventId, eventUpdateDto));
-
-        // Then
-        verify(eventRepository, times(1)).findById(eventId);
-        assertThat(exception.getMessage()).isEqualTo("해당 이벤트가 없습니다");
-    }
 
     @Test
     void updateEventFail_EventIsDeleted() {
@@ -186,15 +169,17 @@ class EventServiceImplTest {
         Long eventId = 1L;
         EventUpdateDto eventUpdateDto = new EventUpdateDto(LocalDateTime.now().plusDays(2), LocalDateTime.now().plusDays(15));
 
+        Event event = new Event();
         event.setIsDeleted(true);
+
         when(eventInfoRepository.existsById(eventInfoId)).thenReturn(true);
-        when(eventRepository.findById(eventId)).thenReturn(Optional.of(event));
+        when(eventRepository.findByEventIdAndIsDeletedFalse(eventId)).thenReturn(Optional.empty());
 
         // When
         Throwable exception = assertThrows(IllegalArgumentException.class, () -> eventServiceImpl.updateEvent(eventInfoId, eventId, eventUpdateDto));
 
         // Then
-        verify(eventRepository, times(1)).findById(eventId);
+        verify(eventRepository, times(1)).findByEventIdAndIsDeletedFalse(eventId);
         assertThat(exception.getMessage()).isEqualTo("해당 이벤트가 없습니다");
     }
 
@@ -207,12 +192,12 @@ class EventServiceImplTest {
 
         //when
         when(eventInfoRepository.existsById(eventInfoId)).thenReturn(true);
-        when(eventRepository.findById(eventId)).thenReturn(Optional.of(event));
+        when(eventRepository.findByEventIdAndIsDeletedFalse(eventId)).thenReturn(Optional.of(event));
         eventServiceImpl.deleteEvent(eventInfoId,eventId);
 
         //then
         verify(eventInfoRepository,times(1)).existsById(eventInfoId);
-        verify(eventRepository, times(1)).findById(eventId);
+        verify(eventRepository, times(1)).findByEventIdAndIsDeletedFalse(eventId);
         assertThat(event.getIsDeleted()).isTrue();
     }
 
@@ -240,12 +225,12 @@ class EventServiceImplTest {
 
         //when
         when(eventInfoRepository.existsById(eventInfoId)).thenReturn(true);
-        when(eventRepository.findById(eventId)).thenReturn(Optional.empty());
+        when(eventRepository.findByEventIdAndIsDeletedFalse(eventId)).thenReturn(Optional.empty());
         Throwable exception = assertThrows(IllegalArgumentException.class, () -> eventServiceImpl.deleteEvent(eventInfoId, eventId));
 
         //then
         verify(eventInfoRepository, times(1)).existsById(eventInfoId);
-        verify(eventRepository, times(1)).findById(eventId);
+        verify(eventRepository, times(1)).findByEventIdAndIsDeletedFalse(eventId);
         assertThat(exception.getMessage()).isEqualTo("해당 이벤트가 없습니다");
     }
 
