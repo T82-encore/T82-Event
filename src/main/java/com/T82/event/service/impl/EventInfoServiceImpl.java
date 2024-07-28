@@ -1,5 +1,7 @@
 package com.T82.event.service.impl;
 
+import com.T82.event.config.kafka.EventInfoProducer;
+import com.T82.event.dto.response.KafkaDto;
 import com.T82.event.domain.Category;
 import com.T82.event.domain.EventInfo;
 import com.T82.event.domain.repository.CategoryRepository;
@@ -9,27 +11,50 @@ import com.T82.event.dto.request.UpdateEventInfoRequest;
 import com.T82.event.dto.response.EventGetEarliestOpenTicket;
 import com.T82.event.dto.response.EventInfoListResponse;
 import com.T82.event.dto.response.EventInfoResponse;
+import com.T82.event.dto.response.ReviewDto;
 import com.T82.event.service.EventInfoService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class EventInfoServiceImpl implements EventInfoService {
     private final EventInfoRepository eventInfoRepository;
     private final CategoryRepository categoryRepository;
+    private final EventInfoProducer eventInfoProducer;
+
+    @KafkaListener( topics = "reviewTopic")
+    @Transactional
+    public void userTopicConsumer(KafkaDto<ReviewDto> kafkaDto){
+        if (kafkaDto.status().equals("create")) {
+            EventInfo eventInfo = eventInfoRepository
+                    .findById(kafkaDto.data().getEventInfoId())
+                    .orElseThrow(IllegalArgumentException::new);
+
+            eventInfo.addReview(kafkaDto.data().getRating());
+        } else if (kafkaDto.status().equals("delete")) {
+            EventInfo eventInfo = eventInfoRepository
+                    .findById(kafkaDto.data().getEventInfoId())
+                    .orElseThrow(IllegalArgumentException::new);
+
+            eventInfo.deleteReview(kafkaDto.data().getRating());
+        }
+    }
 
     @Override
     public void createEventInfo(EventInfoRequest request) {
+        EventInfo eventInfo = eventInfoRepository.save(request.toEntity());
 
-        eventInfoRepository.save(request.toEntity());
+        eventInfoProducer.send(eventInfo.getEventInfoId(), "create");
     }
 
     @Override
@@ -52,6 +77,8 @@ public class EventInfoServiceImpl implements EventInfoService {
                 .findById(id)
                 .orElseThrow(IllegalArgumentException::new);
         eventInfo.setDeleted(true);
+
+        eventInfoProducer.send(eventInfo.getEventInfoId(), "delete");
     }
 
     @Override

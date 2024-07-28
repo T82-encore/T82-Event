@@ -16,10 +16,16 @@ public class Section {
     @Column(name = "sectionId")
     private Long sectionId;
 
+    @Column(name = "startRow")
+    private Integer startRow;
+
+    @Column(name = "startCol")
+    private Integer startCol;
+
     @Column(name = "seatRowCount")
     private Long seatRowCount;
 
-    @Column(name = "seatColumnsCount")
+    @Column(name = "seatColCount")
     private Long seatColumnsCount;
 
     @Column(name = "sectionName")

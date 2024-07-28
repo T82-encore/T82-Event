@@ -1,7 +1,10 @@
 package com.T82.event.controller;
 
+import com.T82.event.domain.repository.EventRepository;
 import com.T82.event.dto.request.EventCreateDto;
 import com.T82.event.dto.request.EventUpdateDto;
+import com.T82.event.dto.response.EventDetail;
+import com.T82.event.dto.response.EventDto;
 import com.T82.event.dto.response.EventGetInfoList;
 import com.T82.event.service.EventService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +18,12 @@ import java.util.List;
 public class EventController {
 
     private final EventService eventService;
+    private final EventRepository eventRepository;
+
+    @GetMapping("/test")
+    public EventDto test() {
+        return eventRepository.test(1L);
+    }
 
     @PostMapping("{eventInfoId}/events")
     public void createEvent(@PathVariable("eventInfoId") Long eventInfoId
@@ -44,6 +53,11 @@ public class EventController {
         return eventService.getInfoList(eventInfoId);
     }
 
+    //티켓 -> 이벤트 feign 요청
+    @GetMapping("{eventId}/details")
+    public EventDetail getEventDetail(@PathVariable("eventId") Long id){
+        return eventService.getEventDetail(id);
+    }
 
 
 }

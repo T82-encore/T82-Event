@@ -2,6 +2,8 @@ package com.T82.event.service;
 
 import com.T82.event.dto.request.EventCreateDto;
 import com.T82.event.dto.request.EventUpdateDto;
+import com.T82.event.dto.response.EventDetail;
+import com.T82.event.dto.response.EventDto;
 import com.T82.event.dto.response.EventGetEarliestOpenTicket;
 import com.T82.event.dto.response.EventGetInfoList;
 
@@ -16,4 +18,6 @@ public interface EventService {
     void deleteEvent(Long id, Long eventId);
 
     List<EventGetInfoList> getInfoList(Long eventInfoId);
+
+    EventDetail getEventDetail(Long eventId);
 }

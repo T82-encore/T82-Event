@@ -16,9 +16,6 @@ public class SeatGradeInfo {
     @Column(name = "price")
     private Integer price;
 
-    @Column(name = "seatGrade")
-    private String seatGrade;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sectionId", nullable = false)
     private Section section;

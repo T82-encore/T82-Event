@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: T82-event
+  datasource:
+    url: ${mysql_url}
+    username: ${mysql_username}
+    password: ${mysql_password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+  kafka:
+    consumer:
+      group-id: ${kakfa_group_id}
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
+      auto-offset-reset: earliest
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    bootstrap-servers: ${kafka_server}
+
+jwt:
+  secret: ${jwt_secret}
+
+server:
+  port: 8080

@@ -1,5 +1,6 @@
 package com.T82.event.domain;
 
+import com.T82.event.dto.response.ReviewDto;
 import jakarta.persistence.*;
 
 import lombok.*;
@@ -33,6 +34,10 @@ public class EventInfo {
     @Builder.Default
     private Double rating = 0.0;
 
+    @Column(name = "reviewCount")
+    @Builder.Default
+    private Integer reviewCount = 0;
+
     @Column(name = "runningTime")
     @Setter
     private String runningTime;
@@ -49,6 +54,9 @@ public class EventInfo {
     @Column(name = "bookStartTime")
     @Setter
     private LocalDateTime bookStartTime;
+
+    @Column(name = "dibCount")
+    private Long dibCount;
 
     @Column(name = "isDeleted")
     @Builder.Default
@@ -68,4 +76,18 @@ public class EventInfo {
 
     @OneToMany(mappedBy = "eventInfo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SeatGradeInfo> seatGradeInfos;
+
+    public void addReview(Double rating) {
+        this.reviewCount += 1;
+        this.rating += rating;
+    }
+
+    public void deleteReview(Double rating) {
+        this.reviewCount -= 1;
+        this.rating -= rating;
+    }
+
+    public void addDib() { this.dibCount += 1; }
+
+    public void deleteDib() {this.dibCount -= 1;}
 }
