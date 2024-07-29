@@ -40,7 +40,7 @@ public class EventServiceImpl implements EventService {
                 new EventDto(
                     event.getEventId(),
                     eventInfo.getEventPlace(),
-                    eventInfoRepository.test(eventInfo.getEventInfoId())
+                    eventInfoRepository.findEventInfoData(eventInfo.getEventInfoId())
                 )
         );
     }

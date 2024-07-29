@@ -19,11 +19,11 @@ public interface EventInfoRepository extends JpaRepository<EventInfo, Long> {
     Optional<EventInfo> findByCategory(Category category);
 
     //현재 시간으로 예매시간이 빠른순으로 정렬
-    @Query(value = "SELECT * FROM event_infos WHERE book_start_time > :now ORDER BY book_start_time ASC LIMIT 10", nativeQuery = true)
+    @Query(value = "SELECT * FROM event_infos WHERE book_start_time > :now AND is_deleted = false ORDER BY book_start_time ASC LIMIT 10", nativeQuery = true)
     List<EventInfo> findComingEvents(@Param("now") LocalDateTime now);
-    @Query("SELECT e FROM EventInfo e WHERE e.category.categoryId IN :categoryIds ORDER BY e.rating DESC ")
+    @Query("SELECT e FROM EventInfo e WHERE e.category.categoryId IN :categoryIds AND e.deleted = false ORDER BY e.rating DESC ")
     List<EventInfo> findByCategoryIds(@Param("categoryIds") List<Long> categoryIds, PageRequest pageRequest);
-    @Query("SELECT e FROM EventInfo e WHERE e.bookStartTime > :currentDateTime AND e.category.categoryId IN :categoryIds ORDER BY e.bookStartTime ASC")
+    @Query("SELECT e FROM EventInfo e WHERE e.bookStartTime > :currentDateTime AND e.deleted = false AND e.category.categoryId IN :categoryIds ORDER BY e.bookStartTime ASC")
     List<EventInfo> findNextUpcomingEvents(@Param("categoryIds") List<Long> categoryIds, PageRequest pageRequest, LocalDateTime currentDateTime);
     @Query("SELECT e FROM EventInfo e WHERE e.deleted = false ORDER BY e.sellCount DESC")
     List<EventInfo> findTop10BySellCountDesc(PageRequest pageRequest);
@@ -36,5 +36,5 @@ public interface EventInfoRepository extends JpaRepository<EventInfo, Long> {
             "JOIN Section s ON ep.placeId = s.eventPlace.placeId " +
             "JOIN SeatGradeInfo sgi ON s.sectionId = sgi.section.sectionId AND ei.eventInfoId = sgi.eventInfo.eventInfoId " +
             "WHERE ei.eventInfoId = :eventInfoId")
-    List<SectionDto> test(@Param("eventInfoId") Long eventInfoId);
+    List<SectionDto> findEventInfoData(@Param("eventInfoId") Long eventInfoId);
 }
