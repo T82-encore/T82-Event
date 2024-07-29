@@ -18,12 +18,6 @@ import java.util.List;
 public class EventController {
 
     private final EventService eventService;
-    private final EventRepository eventRepository;
-
-    @GetMapping("/test")
-    public EventDto test() {
-        return eventRepository.test(1L);
-    }
 
     @PostMapping("{eventInfoId}/events")
     public void createEvent(@PathVariable("eventInfoId") Long eventInfoId
