@@ -1,9 +1,6 @@
 package com.T82.event.service.impl;
 
-import com.T82.event.domain.Category;
-import com.T82.event.domain.Event;
-import com.T82.event.domain.EventInfo;
-import com.T82.event.domain.EventPlace;
+import com.T82.event.domain.*;
 import com.T82.event.domain.repository.EventInfoRepository;
 import com.T82.event.domain.repository.EventRepository;
 import com.T82.event.dto.request.EventCreateDto;
@@ -41,6 +38,8 @@ class EventServiceImplTest {
 
     private Event event;
 
+    private List<Section> sectionList;
+
     private List<EventInfo> eventInfoList;
 
     private List<Event> eventList;
@@ -53,7 +52,7 @@ class EventServiceImplTest {
 
         Category category = new Category(1L, "콘서트", null, null);
 
-        EventPlace eventPlace = new EventPlace(1L, "장충 체육관", "장충동", 100, true, null, null);
+        EventPlace eventPlace = new EventPlace(1L, "장충 체육관", "장충동", 100, true, null, null,eventInfoList,sectionList);
 
         eventInfoList = new ArrayList<>();
 
@@ -63,10 +62,12 @@ class EventServiceImplTest {
                     "단콘 " + (i + 1),
                     "콘서트임",
                     8.5,
+                    0,
                     "120분",
                     "12세 관람가",
                     0,
                     LocalDateTime.now().plusDays(i),
+                    0L,
                     false,
                     null,
                     category,
@@ -74,6 +75,8 @@ class EventServiceImplTest {
                     null
             ));
         }
+
+
 
         eventList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
@@ -88,8 +91,8 @@ class EventServiceImplTest {
             ));
         }
 
-        eventInfo = new EventInfo(1L, "단콘" ,"콘서트임", 8.5, "120분", "12세 관람가", 0
-                , LocalDateTime.now(),false, null, category, eventPlace,null);
+        eventInfo = new EventInfo(1L, "단콘" ,"콘서트임", 8.5, 0,"120분", "12세 관람가", 0
+                , LocalDateTime.now(),0L,false, null, category, eventPlace,null);
 
         event = new Event(1L, LocalDateTime.now().plusDays(10), LocalDateTime.now().plusDays(5),false,false,0L ,eventInfo);
 

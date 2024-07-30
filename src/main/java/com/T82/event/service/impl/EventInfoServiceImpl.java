@@ -1,6 +1,7 @@
 package com.T82.event.service.impl;
 
 import com.T82.event.config.kafka.EventInfoProducer;
+import com.T82.event.domain.repository.EventPlaceRepository;
 import com.T82.event.dto.response.KafkaDto;
 import com.T82.event.domain.Category;
 import com.T82.event.domain.EventInfo;
@@ -31,6 +32,8 @@ public class EventInfoServiceImpl implements EventInfoService {
     private final EventInfoRepository eventInfoRepository;
     private final CategoryRepository categoryRepository;
     private final EventInfoProducer eventInfoProducer;
+    private final EventPlaceRepository eventPlaceRepository;
+
 
     @KafkaListener( topics = "reviewTopic")
     @Transactional
@@ -52,6 +55,10 @@ public class EventInfoServiceImpl implements EventInfoService {
 
     @Override
     public void createEventInfo(EventInfoRequest request) {
+
+        eventPlaceRepository.findById(request.placeId()).orElseThrow(IllegalArgumentException::new);
+        categoryRepository.findById(request.categoryId()).orElseThrow(IllegalArgumentException::new);
+
         EventInfo eventInfo = eventInfoRepository.save(request.toEntity());
 
         eventInfoProducer.send(eventInfo.getEventInfoId(), "create");

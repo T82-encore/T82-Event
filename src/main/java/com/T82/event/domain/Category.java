@@ -25,7 +25,7 @@ public class Category {
     private String categoryName;
 
     @Column(name = "parentId")
-    private String parentId;
+    private Long parentId;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EventInfo> eventInfos;

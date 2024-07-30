@@ -2,10 +2,12 @@ package com.T82.event.domain;
 
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 @Entity
 @Table(name = "Seat_Grade_Infos")
 @Data
+@Builder
 public class SeatGradeInfo {
 
     @Id
