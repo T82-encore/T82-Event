@@ -6,6 +6,7 @@ import com.T82.event.domain.Event;
 import com.T82.event.domain.EventInfo;
 import com.T82.event.domain.repository.EventInfoRepository;
 import com.T82.event.domain.repository.EventRepository;
+import com.T82.event.domain.repository.SectionDAO;
 import com.T82.event.dto.request.EventCreateDto;
 import com.T82.event.dto.request.EventUpdateDto;
 import com.T82.event.dto.response.*;
@@ -27,6 +28,7 @@ public class EventServiceImpl implements EventService {
     private static final Logger log = LoggerFactory.getLogger(EventServiceImpl.class);
     private final EventRepository eventRepository;
     private final EventInfoRepository eventInfoRepository;
+    private final SectionDAO sectionDAO;
     private final EventProducer eventProducer;
 
     @Override
@@ -40,7 +42,7 @@ public class EventServiceImpl implements EventService {
                 new EventDto(
                     event.getEventId(),
                     eventInfo.getEventPlace(),
-                    eventInfoRepository.findEventInfoData(eventInfo.getEventInfoId())
+                    sectionDAO.getSectionDataList(eventInfo.getEventInfoId())
                 )
         );
     }
