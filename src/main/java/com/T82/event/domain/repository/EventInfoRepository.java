@@ -37,4 +37,7 @@ public interface EventInfoRepository extends JpaRepository<EventInfo, Long> {
             "JOIN SeatGradeInfo sgi ON s.sectionId = sgi.section.sectionId AND ei.eventInfoId = sgi.eventInfo.eventInfoId " +
             "WHERE ei.eventInfoId = :eventInfoId")
     List<SectionDto> findEventInfoData(@Param("eventInfoId") Long eventInfoId);
+
+    List<EventInfo> findByTitleContainingAndDeletedFalse (String keyword);
+
 }

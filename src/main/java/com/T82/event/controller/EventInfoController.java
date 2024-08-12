@@ -5,6 +5,7 @@ import com.T82.event.dto.request.UpdateEventInfoRequest;
 import com.T82.event.dto.response.EventGetEarliestOpenTicket;
 import com.T82.event.dto.response.EventInfoListResponse;
 import com.T82.event.dto.response.EventInfoResponse;
+import com.T82.event.dto.response.SearchResponse;
 import com.T82.event.service.EventInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -62,7 +63,11 @@ public class EventInfoController {
 
     @GetMapping("/{eventInfoId}")
     public EventInfoResponse getEventInfo(@PathVariable("eventInfoId") Long eventInfoId){
-
         return eventInfoService.getEventInfo(eventInfoId);
+    }
+
+    @GetMapping("/search")
+    public List<SearchResponse> searchEventInfo (@RequestParam String searchWord){
+        return eventInfoService.searchByTitle(searchWord);
     }
 }
