@@ -1,12 +1,16 @@
 package com.T82.event.service.impl;
 
+import com.T82.event.domain.Category;
 import com.T82.event.domain.EventInfo;
+import com.T82.event.domain.EventPlace;
 import com.T82.event.domain.repository.CategoryRepository;
 import com.T82.event.domain.repository.EventInfoRepository;
+import com.T82.event.domain.repository.EventPlaceRepository;
 import com.T82.event.dto.request.EventInfoRequest;
 import com.T82.event.dto.request.UpdateEventInfoRequest;
 import com.T82.event.dto.response.EventInfoListResponse;
 import com.T82.event.dto.response.EventInfoResponse;
+import com.T82.event.dto.response.SearchResponse;
 import com.T82.event.service.EventInfoService;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -35,9 +39,12 @@ class EventInfoServiceImplTest {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private EventPlaceRepository eventPlaceRepository;
+
     @Nested
     @Transactional
-    class 공연정보_생성{
+    class 공연정보_생성 {
         @Test
         void 성공() {
             //given
@@ -62,6 +69,7 @@ class EventInfoServiceImplTest {
     @Transactional
     class 공연정보_수정 {
         private Long id;
+
         @BeforeEach
         void setUp() {
             EventInfoRequest request = new EventInfoRequest(
@@ -77,6 +85,7 @@ class EventInfoServiceImplTest {
             entityManager.flush();
             entityManager.clear();
         }
+
         @Test
         void 성공() {
             //given
@@ -98,6 +107,7 @@ class EventInfoServiceImplTest {
             assertEquals(request.runningTime(), eventInfo1.getRunningTime());
             assertEquals(request.bookStartTime(), eventInfo1.getBookStartTime());
         }
+
         @Test
         void 실패_데이터_없음() {
             //given
@@ -118,6 +128,7 @@ class EventInfoServiceImplTest {
     @Transactional
     class 공연정보_삭제 {
         private Long id;
+
         @BeforeEach
         void setUp() {
             EventInfoRequest request = new EventInfoRequest(
@@ -133,6 +144,7 @@ class EventInfoServiceImplTest {
             entityManager.flush();
             entityManager.clear();
         }
+
         @Test
         void 성공() {
             //given
@@ -142,6 +154,7 @@ class EventInfoServiceImplTest {
             //then
             assertTrue(eventInfoRepository.findById(eventInfoId).get().isDeleted());
         }
+
         @Test
         void 실패_데이터_없음() {
             //given
@@ -156,11 +169,11 @@ class EventInfoServiceImplTest {
     class 상위_카테고리_기준으로_판매량_10위까지_리스트로_전달 {
         @BeforeEach
         void setUp() {
-            for(int l = 1; l < 5; l++) {
-                for(int i = 4; i < 10; i++) {
+            for (int l = 1; l < 5; l++) {
+                for (int i = 4; i < 10; i++) {
                     EventInfoRequest request = new EventInfoRequest(
-                            "테스트 제목"+l+i,
-                            "테스트 내용"+l+i,
+                            "테스트 제목" + l + i,
+                            "테스트 내용" + l + i,
                             "174분",
                             "18세",
                             LocalDateTime.of(2024, 5, 27, 16, 0),
@@ -174,6 +187,7 @@ class EventInfoServiceImplTest {
             entityManager.flush();
             entityManager.clear();
         }
+
         @Test
         void 성공() {
             //given
@@ -183,11 +197,12 @@ class EventInfoServiceImplTest {
             List<EventInfoListResponse> list = eventInfoService.getEventInfoListByHighCategoryId(categoryId);
             //then
             assertTrue(list.size() <= 10);
-            for(int i = 0; i < list.size() - 1; i++) {
+            for (int i = 0; i < list.size() - 1; i++) {
                 assertTrue(list.get(i).rating() <= list.get(i + 1).rating());
                 assertTrue(categoryIds.contains(eventInfoRepository.findById(list.get(i).eventInfoId()).get().getCategory().getCategoryId()));
             }
         }
+
         @Test
         void 실패_자식_카테고리_아이디_전달() {
             //given
@@ -203,11 +218,11 @@ class EventInfoServiceImplTest {
     class 선택한_카테고리_하위_티켓_중에서_오픈일이_빠른_티켓_10개_전달 {
         @BeforeEach
         void setUp() {
-            for(int l = 1; l < 5; l++) {
-                for(int i = 4; i < 10; i++) {
+            for (int l = 1; l < 5; l++) {
+                for (int i = 4; i < 10; i++) {
                     EventInfoRequest request = new EventInfoRequest(
-                            "테스트 제목"+l+i,
-                            "테스트 내용"+l+i,
+                            "테스트 제목" + l + i,
+                            "테스트 내용" + l + i,
                             "174분",
                             "18세",
                             LocalDateTime.of(2024, 8, l, i, 0),
@@ -220,6 +235,7 @@ class EventInfoServiceImplTest {
             entityManager.flush();
             entityManager.clear();
         }
+
         @Test
         void 성공() {
             //given
@@ -229,10 +245,11 @@ class EventInfoServiceImplTest {
             List<EventInfoListResponse> list = eventInfoService.getNextUpcomingEvents(categoryId);
             //then
             assertTrue(list.size() <= 10 && list.size() >= 5);
-            for(int i = 0; i < list.size() - 1; i++) {
+            for (int i = 0; i < list.size() - 1; i++) {
                 assertTrue(categoryIds.contains(eventInfoRepository.findById(list.get(i).eventInfoId()).get().getCategory().getCategoryId()));
             }
         }
+
         @Test
         void 실패_자식_카테고리_아이디_전달() {
             //given
@@ -247,11 +264,11 @@ class EventInfoServiceImplTest {
     class 현재_오픈된_티켓_중에서_판매량이_가장_많은_공연정보_10개_출력 {
         @BeforeEach
         void setUp() {
-            for(int l = 1; l < 5; l++) {
-                for(int i = 4; i < 10; i++) {
+            for (int l = 1; l < 5; l++) {
+                for (int i = 4; i < 10; i++) {
                     EventInfo eventInfo = new EventInfoRequest(
-                            "테스트 제목"+l+i,
-                            "테스트 내용"+l+i,
+                            "테스트 제목" + l + i,
+                            "테스트 내용" + l + i,
                             "174분",
                             "18세",
                             LocalDateTime.of(2024, 8, l, i, 0),
@@ -265,6 +282,7 @@ class EventInfoServiceImplTest {
             entityManager.flush();
             entityManager.clear();
         }
+
         @Test
         void 성공() {
             //given & when
@@ -279,11 +297,11 @@ class EventInfoServiceImplTest {
     class 하위_카테고리_별_공연정보_리스트_10개씩_페이징 {
         @BeforeEach
         void setUp() {
-            for(int l = 1; l < 17; l++) {
-                for(int i = 4; i < 8; i++) {
+            for (int l = 1; l < 17; l++) {
+                for (int i = 4; i < 8; i++) {
                     EventInfo eventInfo = new EventInfoRequest(
-                            "테스트 제목"+l+i,
-                            "테스트 내용"+l+i,
+                            "테스트 제목" + l + i,
+                            "테스트 내용" + l + i,
                             "174분",
                             "18세",
                             LocalDateTime.of(2024, 8, l, i, 0),
@@ -297,6 +315,7 @@ class EventInfoServiceImplTest {
             entityManager.flush();
             entityManager.clear();
         }
+
         @Test
         void 성공_1페이지() {
             //given
@@ -307,6 +326,7 @@ class EventInfoServiceImplTest {
             //then
             assertEquals(10, page1.getNumberOfElements());
         }
+
         @Test
         void 성공_2페이지() {
             //given
@@ -318,7 +338,7 @@ class EventInfoServiceImplTest {
             assertEquals(1, page1.getNumberOfElements());
         }
     }
-  
+
     @Nested
     @Transactional
     class 공연정보_반환 {
@@ -340,12 +360,68 @@ class EventInfoServiceImplTest {
             assertEquals(eventInfo.getEventPlace().getPlaceName(), response.getPlaceName());
             assertEquals(eventInfo.getEventPlace().getTotalSeat(), response.getTotalSeat());
         }
+
         @Test
         void 실패_데이터_없음() {
             //given
             Long eventInfoId = 999L;
             //when & then
             assertThrows(IllegalArgumentException.class, () -> eventInfoService.getEventInfo(eventInfoId));
+        }
+    }
+
+    @Nested
+    @Transactional
+    class 공연_검색 {
+
+        @BeforeEach
+        void setUp() {
+            // 카테고리 엔티티를 먼저 생성
+            Category category = Category.builder()
+                    .categoryName("공연")
+                    .build();
+                    categoryRepository.save(category);
+
+            EventPlace place = EventPlace.builder()
+                    .placeName("홍범댁")
+                    .build();
+
+                eventPlaceRepository.save(place);
+
+            // 여러 개의 이벤트를 저장
+            for (int l = 1; l < 5; l++) {
+                for (int i = 4; i < 10; i++) {
+                    EventInfoRequest request = new EventInfoRequest(
+                            "홍범 항복" + l + i,
+                            "테스트 내용" + l + i,
+                            "174분",
+                            "18세",
+                            LocalDateTime.of(2024, 5, 27, 16, 0),
+                            1L,
+                            1L// 저장된 카테고리 ID 사용
+                    );
+                    eventInfoRepository.save(request.toEntity());
+                }
+            }
+
+            entityManager.flush();
+            entityManager.clear();
+        }
+
+
+        @Test
+        void 공연_검색() {
+            //given
+            String keyWord = "홍범";
+
+            //when
+            List<SearchResponse> searchResults = eventInfoService.searchByTitle(keyWord);
+
+            //then
+            // 검색된 모든 결과가 기대한 대로 "홍범"을 포함하는지 확인
+            for (SearchResponse response : searchResults) {
+                assertTrue(response.getTitle().contains(keyWord), "검색 결과의 제목이 키워드를 포함해야 합니다.");
+            }
         }
     }
 }
