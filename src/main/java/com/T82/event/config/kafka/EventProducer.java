@@ -1,7 +1,6 @@
 package com.T82.event.config.kafka;
 
 import com.T82.event.dto.response.EventDto;
-import com.T82.event.dto.response.KafkaDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
