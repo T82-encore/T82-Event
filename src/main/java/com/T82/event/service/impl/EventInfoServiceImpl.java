@@ -1,14 +1,14 @@
 package com.T82.event.service.impl;
 
 import com.T82.event.config.kafka.EventInfoProducer;
-import com.T82.event.domain.repository.EventPlaceRepository;
-import com.T82.event.dto.response.*;
 import com.T82.event.domain.Category;
 import com.T82.event.domain.EventInfo;
 import com.T82.event.domain.repository.CategoryRepository;
 import com.T82.event.domain.repository.EventInfoRepository;
+import com.T82.event.domain.repository.EventPlaceRepository;
 import com.T82.event.dto.request.EventInfoRequest;
 import com.T82.event.dto.request.UpdateEventInfoRequest;
+import com.T82.event.dto.response.*;
 import com.T82.event.service.EventInfoService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
