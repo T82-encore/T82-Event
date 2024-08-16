@@ -19,6 +19,7 @@ public class EventInfoResponse {
     private String ageRestriction;
     private String placeName;
     private Integer totalSeat;
+    private String imageUrl;
 
 
     public static EventInfoResponse fromEntity(EventInfo eventInfo){
@@ -30,6 +31,7 @@ public class EventInfoResponse {
                 .ageRestriction(eventInfo.getAgeRestriction())
                 .placeName(eventInfo.getEventPlace().getPlaceName())
                 .totalSeat(eventInfo.getEventPlace().getTotalSeat())
+                .imageUrl(eventInfo.getImageUrl())
                 .build();
     }
 }
