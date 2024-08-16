@@ -19,7 +19,9 @@ public class EventGetEarliestOpenTicket {
     private Long eventInfoId;
     private String title;
     private Double rating;
-    private LocalDateTime bookStartTime ;
+    private LocalDateTime bookStartTime;
+    private String imageUrl;
+
 
     public static EventGetEarliestOpenTicket fromEntity(EventInfo eventInfo){
         return EventGetEarliestOpenTicket.builder()
@@ -27,6 +29,7 @@ public class EventGetEarliestOpenTicket {
                 .title(eventInfo.getTitle())
                 .rating(eventInfo.getRating())
                 .bookStartTime(eventInfo.getBookStartTime())
+                .imageUrl(eventInfo.getImageUrl())
                 .build();
     }
 }

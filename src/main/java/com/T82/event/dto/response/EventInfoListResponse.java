@@ -9,7 +9,7 @@ public record EventInfoListResponse(
         Long eventInfoId,
         String title,
         Double rating,
-
+        String imageUrl,
         LocalDateTime bookStartTime
         ) {
     public static EventInfoListResponse from(EventInfo eventInfo) {
@@ -17,6 +17,7 @@ public record EventInfoListResponse(
                 eventInfo.getEventInfoId(),
                 eventInfo.getTitle(),
                 eventInfo.getRating(),
+                eventInfo.getImageUrl(),
                 eventInfo.getBookStartTime()
         );
     }
