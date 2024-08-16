@@ -13,7 +13,9 @@ public record EventInfoRequest(
         String ageRestriction,
         LocalDateTime bookStartTime,
         Long placeId,
-        Long categoryId
+        Long categoryId,
+
+        String imageUrl
 ) {
     public EventInfo toEntity() {
         return EventInfo.builder()
@@ -24,6 +26,7 @@ public record EventInfoRequest(
                 .bookStartTime(bookStartTime)
                 .eventPlace(EventPlace.builder().placeId(placeId).build())
                 .category(Category.builder().categoryId(categoryId).build())
+                .imageUrl(imageUrl)
                 .build();
     }
 }

@@ -30,6 +30,9 @@ public class EventInfo {
     @Setter
     private String description;
 
+    @Column(name = "imageUrl")
+    private String imageUrl;
+
     @Column(name = "rating")
     @Builder.Default
     private Double rating = 0.0;
