@@ -22,6 +22,7 @@ public class EventGetEarliestOpenTicket {
     private LocalDateTime bookStartTime;
     private String imageUrl;
 
+
     public static EventGetEarliestOpenTicket fromEntity(EventInfo eventInfo){
         return EventGetEarliestOpenTicket.builder()
                 .eventInfoId(eventInfo.getEventInfoId())
