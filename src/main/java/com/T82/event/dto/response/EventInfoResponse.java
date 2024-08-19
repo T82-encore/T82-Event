@@ -18,6 +18,7 @@ public class EventInfoResponse {
     private String runningTime;
     private String ageRestriction;
     private String placeName;
+    private Long placeId;
     private Integer totalSeat;
     private String imageUrl;
 
@@ -30,6 +31,7 @@ public class EventInfoResponse {
                 .runningTime(eventInfo.getRunningTime())
                 .ageRestriction(eventInfo.getAgeRestriction())
                 .placeName(eventInfo.getEventPlace().getPlaceName())
+                .placeId(eventInfo.getEventPlace().getPlaceId())
                 .totalSeat(eventInfo.getEventPlace().getTotalSeat())
                 .imageUrl(eventInfo.getImageUrl())
                 .build();

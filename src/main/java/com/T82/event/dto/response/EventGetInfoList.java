@@ -26,7 +26,7 @@ public class EventGetInfoList{
     public static EventGetInfoList fromEntity(Event event){
         return EventGetInfoList.builder()
                 .eventId(event.getEventId())
-                .eventStartTime(event.getEventStartTime())
+                .eventStartTime(event.getEventStartTime().plusHours(9))
                 .eventSellCount(event.getEventSellCount())
                 .build();
     }

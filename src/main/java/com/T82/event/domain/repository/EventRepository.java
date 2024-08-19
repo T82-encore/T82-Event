@@ -19,6 +19,8 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     List<Event> findAllByEventInfoAndBookEndTimeAfterAndIsDeletedIsFalse(EventInfo eventInfo , LocalDateTime currentTime);
     @Query("select ei.eventInfoId eventInfoId, ei.title title, e.eventStartTime eventStartTime from Event e join EventInfo ei on e.eventInfo.eventInfoId = ei.eventInfoId where e.eventId = :eventId")
     EventDetail findEventDetailByEventId(@Param("eventId") Long eventId);
+
+
 //    @Query("select e.eventId eventId, ep.placeName placeName, ep.address address, ep.seatAvailable seatAvailAble, " +
 //            "ep.totalSeat totalSeat, ep.totalRow totalRow, ep.totalCol totalCol, s.sectionName sectionName, " +
 //            "s.startRow startRow, s.startCol startCol, s.seatRowCount rowNum, s.seatColumnsCount colNum, " +
