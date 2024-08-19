@@ -17,6 +17,7 @@ public class GrpcUtil {
                 .setEventInfoId(eventDetail.getEventInfoId())
                 .setTitle(eventDetail.getTitle())
                 .setEventStartTime(eventDetail.getEventStartTime().toString())
+                .setImageUrl(eventDetail.getImageUrl())
                 .build();
     }
 }
