@@ -23,8 +23,8 @@ public class EventCreateDto {
    public Event toEntity(EventInfo eventInfo){
       return Event.builder()
               .eventInfo(eventInfo)
-              .bookEndTime(bookEndTime)
-              .eventStartTime(eventStartTime)
+              .bookEndTime(bookEndTime.plusHours(9))
+              .eventStartTime(eventStartTime.plusHours(9))
               .eventSellCount(0L)
               .isSoldOut(false)
               .build();
