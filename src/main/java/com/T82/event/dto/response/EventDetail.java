@@ -6,4 +6,5 @@ public interface EventDetail {
     Long getEventInfoId();
     String getTitle();
     LocalDateTime getEventStartTime();
+    String getImageUrl();
 }
